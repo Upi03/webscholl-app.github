@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
@@ -18,7 +18,7 @@ const initialUsers = Array.from({ length: 50 }, (_, i) => ({
 
 const ITEMS_PER_PAGE = 10;
 
-export default function UsersPage() {
+function UsersContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -151,8 +151,8 @@ export default function UsersPage() {
                                 <button
                                     onClick={() => setIsFilterOpen(!isFilterOpen)}
                                     className={`px-10 py-5 rounded-2xl font-black transition-all shadow-sm flex items-center gap-3 border-2 ${isFilterOpen
-                                            ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-400"
-                                            : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                        ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-400"
+                                        : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                                         }`}
                                 >
                                     Filter
@@ -259,8 +259,8 @@ export default function UsersPage() {
                                                     </td>
                                                     <td className="px-8 py-8">
                                                         <span className={`px-5 py-2 inline-flex text-xs leading-5 font-black rounded-full shadow-sm border-2 ${user.role === 'Admin' ? 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30' :
-                                                                user.role === 'Guru' ? 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/30' :
-                                                                    'bg-green-50 text-green-600 border-green-100 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/30'
+                                                            user.role === 'Guru' ? 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/30' :
+                                                                'bg-green-50 text-green-600 border-green-100 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/30'
                                                             }`}>
                                                             {user.role}
                                                         </span>
@@ -434,4 +434,16 @@ export default function UsersPage() {
             )}
         </div>
     )
+}
+
+export default function UsersPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        }>
+            <UsersContent />
+        </Suspense>
+    );
 }
