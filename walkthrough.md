@@ -1,26 +1,31 @@
-# WebSchooll App - Deployment Walkthrough
+# WebSchooll App - Update Walkthrough 🚀
 
-Congratulations! The WebSchooll App has been successfully deployed to Vercel.
+Aplikasi **WebSchooll** telah diperbarui dengan fitur-fitur pendidikan modern. Berikut adalah ringkasan perubahan terbaru yang sudah di-push ke GitHub:
 
-## Deployment Status
-- **Platform**: Vercel
-- **Framework**: Next.js
-- **Status**: Live 🟢
+## 1. Pencarian Global (Global Search) 🔍
+- **Akses Cepat**: Cari halaman (Dashboard, Guru, Tugas) atau Nama Siswa langsung dari Navbar.
+- **Interaksi Cepat**: Gunakan tombol **Enter** setelah mengetik untuk navigasi otomatis.
+- **Shortcut Keyboard**: Tekan tombol **K** untuk langsung fokus ke kotak pencarian.
 
-## Key Features Deployed
-1.  **Rebranding**: Application acts as "WebSchooll App".
-2.  **Role-Based Dashboards**:
-    - **Student**: View separate dashboard with stats and grades.
-    - **Teacher/Admin**: View main dashboard with management tools.
-3.  **Authentication**: Login page with ReCaptcha protection (if environment variables set).
-4.  **Notifications**: UI for toast and dropdown notifications.
+## 2. Sistem Tugas & PR (Assignments) 📚
+- **Tampilan Guru**: Daftar siswa yang sudah mengumpulkan tugas dan fitur pemberian nilai.
+- **Tampilan Siswa**: Daftar tugas yang harus dikerjakan dan fitur **Upload File** (Drag & Drop).
+- **Notifikasi**: Menggunakan sistem **Toast** modern (bukan alert bawaan browser).
 
-## Next Steps for Verification
-1.  **Visit the URL**: Open the provided `.vercel.app` link.
-2.  **Login Test**:
-    - Try logging in as a Student.
-    - Try logging in as a Teacher/Admin.
-3.  **PWA Test**: Try installing the app on a mobile device or desktop (via Chrome address bar).
+## 3. Identitas Visual Sekolah 🏫
+- **Logo Baru**: Ikon Topi Toga (Academic Cap) menggantikan logo petir.
+- **Warna Baru**: Tema utama berubah dari Indigo menjadi **School Blue**.
+- **Dashboard**: Statistik disesuaikan (Total Siswa, Total Guru, Kelas Aktif).
 
-## Troubleshooting
-If you encounter login issues, verify that the `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` and `RECAPTCHA_SECRET_KEY` are correctly set in the Vercel Project Settings > Environment Variables.
+## 4. Profil Akademik Dinamis 👤
+- **Siswa**: Menampilkan statistik Kehadiran, Nilai Rerata, dan Poin.
+- **Guru**: Menampilkan Jam Mengajar, Kelas Aktif, dan Feedback.
+- **Bahasa**: Antarmuka profil kini menggunakan Bahasa Indonesia yang lebih ramah pengguna.
+
+## 5. Perbaikan & Optimasi 🛠️
+- **Icon Fix**: Icon "Total Guru" sudah diperbaiki (bukan lagi icon tas belanja).
+- **PWA Ready**: Dukungan penuh untuk diinstal di Android/iOS/Desktop.
+
+---
+**Status Deployment**: Perubahan ini otomatis dideploy oleh Vercel. 
+Silakan cek URL aplikasi online kamu dalam 1-2 menit.
