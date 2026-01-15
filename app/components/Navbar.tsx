@@ -41,21 +41,22 @@ export default function Navbar() {
                         }
                     }}
                 >
-                    <svg className="w-8 h-8 text-indigo-600 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <svg className="w-8 h-8 text-blue-600 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                     </svg>
                     <h1 className="text-xl font-bold tracking-wide text-gray-900 dark:text-white" suppressHydrationWarning>WebSchooll App</h1>
                 </div>
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center space-x-8">
-                    <Link href="/" className="flex items-center space-x-1 text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition">
+                    <Link href="/" className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">
                         <span>Home</span>
                     </Link>
-                    <Link href="/about" className="flex items-center space-x-1 text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition">
+                    <Link href="/about" className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">
                         <span>About</span>
                     </Link>
-                    <Link href="/contact" className="flex items-center space-x-1 text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition">
+                    <Link href="/contact" className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">
                         <span>Contact</span>
                     </Link>
 
@@ -95,19 +96,19 @@ export default function Navbar() {
             {/* Mobile Menu Dropdown */}
             {isNavbarOpen && (
                 <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-800 shadow-lg py-4 px-6 space-y-4 animate-slide-down">
-                    <Link href="/" className="block text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400" onClick={toggleNavbar}>Home</Link>
-                    <Link href="/about" className="block text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400" onClick={toggleNavbar}>About</Link>
+                    <Link href="/" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Home</Link>
+                    <Link href="/about" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>About</Link>
                     <Link href="/users" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Users</Link>
                     <Link href="/analytics" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Analytics</Link>
                     <Link href="/map" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Map</Link>
                     <Link href="/image-compression" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Image Compression</Link>
-                    <Link href="/sprite" className="block text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400" onClick={toggleNavbar}>Sprite</Link>
+                    <Link href="/sprite" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Sprite</Link>
                     <Link href="/storage" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Storage</Link>
                     <Link href="/indexeddb" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>IndexedDB</Link>
                     <Link href="/realtime-db" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Realtime DB</Link>
-                    <Link href="/settings" className="block text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400" onClick={toggleNavbar}>Settings</Link>
-                    <Link href="/profile" className="block text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400" onClick={toggleNavbar}>Profile</Link>
-                    <Link href="/contact" className="block text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400" onClick={toggleNavbar}>Contact</Link>
+                    <Link href="/settings" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Settings</Link>
+                    <Link href="/profile" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Profile</Link>
+                    <Link href="/contact" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Contact</Link>
                 </div>
             )}
 
@@ -122,7 +123,7 @@ export default function Navbar() {
                         {notifications.map((notif) => (
                             <div key={notif.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700/50 transition-colors cursor-pointer group">
                                 <div className="flex justify-between items-start mb-1">
-                                    <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{notif.title}</h4>
+                                    <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{notif.title}</h4>
                                     <span className="text-[10px] text-gray-400">{notif.time}</span>
                                 </div>
                                 <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{notif.message}</p>
@@ -132,7 +133,7 @@ export default function Navbar() {
                     <div className="p-3 bg-gray-50 dark:bg-gray-900/50 text-center border-t border-gray-100 dark:border-gray-700">
                         <button
                             onClick={handleNewNotification}
-                            className="text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 uppercase tracking-wider"
+                            className="text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 uppercase tracking-wider"
                         >
                             Simulasi Notifikasi Baru
                         </button>

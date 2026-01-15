@@ -47,7 +47,7 @@ export default function TeachersPage() {
                                             <tr key={teacher.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                                 <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                                                     <div className="flex items-center space-x-3">
-                                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
+                                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center text-white font-bold text-xs">
                                                             {teacher.name.substring(0, 2).toUpperCase()}
                                                         </div>
                                                         <span>{teacher.name}</span>
@@ -55,16 +55,16 @@ export default function TeachersPage() {
                                                 </td>
                                                 <td className="px-6 py-4 text-gray-600 dark:text-gray-400 font-mono">{teacher.nip}</td>
                                                 <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
-                                                    <span className="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md text-xs font-semibold">
+                                                    <span className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md text-xs font-semibold">
                                                         {teacher.subject}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${teacher.status === "Active"
-                                                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                                            : teacher.status === "Retired"
-                                                                ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                                                                : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                                                        : teacher.status === "Retired"
+                                                            ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                                                            : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
                                                         }`}>
                                                         {teacher.status}
                                                     </span>

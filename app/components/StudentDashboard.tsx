@@ -9,7 +9,7 @@ export default function StudentDashboard({ userData }: { userData: any }) {
     return (
         <div className="max-w-6xl mx-auto space-y-8">
             {/* Hero / Welcome Section for Student */}
-            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-8 shadow-lg text-white relative overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-8 shadow-lg text-white relative overflow-hidden">
                 <div className="relative z-10">
                     <h2 className="text-3xl font-extrabold mb-2">Halo, {userData?.username || "Siswa"}! 🎓</h2>
                     <p className="text-blue-100 max-w-xl">

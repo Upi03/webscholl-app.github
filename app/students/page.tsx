@@ -26,7 +26,7 @@ export default function StudentsPage() {
                                 <h1 className="text-2xl font-black text-gray-900 dark:text-white">Data Siswa</h1>
                                 <p className="text-gray-500 dark:text-gray-400">Kelola data siswa-siswi sekolah.</p>
                             </div>
-                            <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-purple-600/20">
+                            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-600/20">
                                 + Tambah Siswa
                             </button>
                         </div>
@@ -56,16 +56,16 @@ export default function StudentsPage() {
                                                 </td>
                                                 <td className="px-6 py-4 text-gray-600 dark:text-gray-400 font-mono">{student.nis}</td>
                                                 <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
-                                                    <span className="px-2 py-1 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-md text-xs font-semibold">
+                                                    <span className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md text-xs font-semibold">
                                                         {student.class}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${student.status === "Active"
-                                                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                                            : student.status === "Suspended"
-                                                                ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                                                                : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                                                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                                                        : student.status === "Suspended"
+                                                            ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                                                            : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
                                                         }`}>
                                                         {student.status}
                                                     </span>

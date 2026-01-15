@@ -117,13 +117,13 @@ function UsersContent() {
                             <div className="flex justify-between items-start mb-10">
                                 <div>
                                     <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Daftar Users</h1>
-                                    <Link href="/" className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 font-bold text-sm transition-colors mt-2 inline-block">
+                                    <Link href="/" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-bold text-sm transition-colors mt-2 inline-block">
                                         ← Kembali ke Home
                                     </Link>
                                 </div>
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center gap-2"
+                                    className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black shadow-xl shadow-blue-500/20 active:scale-95 transition-all flex items-center gap-2"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
@@ -140,9 +140,9 @@ function UsersContent() {
                                         placeholder="Cari berdasarkan nama, email, atau role..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="w-full px-8 py-5 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/5 transition-all font-bold text-lg"
+                                        className="w-full px-8 py-5 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all font-bold text-lg"
                                     />
-                                    <div className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-indigo-500 transition-colors pointer-events-none">
+                                    <div className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-blue-500 transition-colors pointer-events-none">
                                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
@@ -151,7 +151,7 @@ function UsersContent() {
                                 <button
                                     onClick={() => setIsFilterOpen(!isFilterOpen)}
                                     className={`px-10 py-5 rounded-2xl font-black transition-all shadow-sm flex items-center gap-3 border-2 ${isFilterOpen
-                                        ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-400"
+                                        ? "bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400"
                                         : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                                         }`}
                                 >
@@ -170,7 +170,7 @@ function UsersContent() {
                                         <select
                                             value={filterKelas}
                                             onChange={(e) => setFilterKelas(e.target.value)}
-                                            className="w-full px-5 py-4 rounded-2xl border-2 border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 font-bold shadow-sm"
+                                            className="w-full px-5 py-4 rounded-2xl border-2 border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 font-bold shadow-sm"
                                         >
                                             <option>Semua</option>
                                             <option>XII-RPL</option>
@@ -182,7 +182,7 @@ function UsersContent() {
                                         <select
                                             value={filterRole}
                                             onChange={(e) => setFilterRole(e.target.value)}
-                                            className="w-full px-5 py-4 rounded-2xl border-2 border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 font-bold shadow-sm"
+                                            className="w-full px-5 py-4 rounded-2xl border-2 border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 font-bold shadow-sm"
                                         >
                                             <option>Semua</option>
                                             <option>Siswa</option>
@@ -196,7 +196,7 @@ function UsersContent() {
                                             type="date"
                                             value={dobStart}
                                             onChange={(e) => setDobStart(e.target.value)}
-                                            className="w-full px-5 py-4 rounded-2xl border-2 border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 font-bold shadow-sm"
+                                            className="w-full px-5 py-4 rounded-2xl border-2 border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 font-bold shadow-sm"
                                         />
                                     </div>
                                     <div className="space-y-3">
@@ -205,7 +205,7 @@ function UsersContent() {
                                             type="date"
                                             value={dobEnd}
                                             onChange={(e) => setDobEnd(e.target.value)}
-                                            className="w-full px-5 py-4 rounded-2xl border-2 border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 font-bold shadow-sm"
+                                            className="w-full px-5 py-4 rounded-2xl border-2 border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 font-bold shadow-sm"
                                         />
                                     </div>
                                     <div className="md:col-span-2 pt-4">
@@ -251,7 +251,7 @@ function UsersContent() {
                                                     onClick={() => setSelectedUser(user)}
                                                 >
                                                     <td className="px-8 py-8 text-sm font-bold text-gray-400 dark:text-gray-500">{user.id}</td>
-                                                    <td className="px-8 py-8 text-lg font-black text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors">{user.name}</td>
+                                                    <td className="px-8 py-8 text-lg font-black text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">{user.name}</td>
                                                     <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-bold">{user.email}</td>
                                                     <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-black">{user.kelas}</td>
                                                     <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-bold italic">
@@ -275,7 +275,7 @@ function UsersContent() {
                             {/* Pagination */}
                             <div className="flex items-center justify-between pt-4">
                                 <div className="text-sm font-black text-gray-400 uppercase tracking-widest flex items-center gap-3">
-                                    <span className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-indigo-600 font-black">{page}</span>
+                                    <span className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-blue-600 font-black">{page}</span>
                                     dari {totalPages} Halaman
                                 </div>
                                 <div className="flex gap-4">
@@ -322,7 +322,7 @@ function UsersContent() {
                                         required
                                         value={newUser.name}
                                         onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
+                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
                                         placeholder="Contoh: Budi Santoso"
                                     />
                                 </div>
@@ -333,7 +333,7 @@ function UsersContent() {
                                         required
                                         value={newUser.email}
                                         onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
+                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
                                         placeholder="user@sekolah.com"
                                     />
                                 </div>
@@ -342,7 +342,7 @@ function UsersContent() {
                                     <select
                                         value={newUser.kelas}
                                         onChange={(e) => setNewUser({ ...newUser, kelas: e.target.value })}
-                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
+                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
                                     >
                                         <option>XII-RPL</option>
                                         <option>XI-TKJ</option>
@@ -353,7 +353,7 @@ function UsersContent() {
                                     <select
                                         value={newUser.role}
                                         onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
+                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
                                     >
                                         <option>Siswa</option>
                                         <option>Guru</option>
@@ -367,13 +367,13 @@ function UsersContent() {
                                         required
                                         value={newUser.tanggalLahir}
                                         onChange={(e) => setNewUser({ ...newUser, tanggalLahir: e.target.value })}
-                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-indigo-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
+                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
                                     />
                                 </div>
                             </div>
                             <div className="flex gap-4 pt-4">
                                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-2xl font-black transition-all hover:bg-gray-200 active:scale-95">Batal</button>
-                                <button type="submit" className="flex-2 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black transition-all shadow-xl shadow-indigo-500/20 active:scale-95">Simpan Data</button>
+                                <button type="submit" className="flex-2 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black transition-all shadow-xl shadow-blue-500/20 active:scale-95">Simpan Data</button>
                             </div>
                         </form>
                     </div>
@@ -390,17 +390,17 @@ function UsersContent() {
                         className="bg-white dark:bg-gray-900 rounded-[3rem] shadow-2xl w-full max-w-md overflow-hidden animate-scale-up border border-white/10"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="relative h-32 bg-gradient-to-r from-indigo-600 to-purple-600">
+                        <div className="relative h-32 bg-gradient-to-r from-blue-600 to-purple-600">
                             <button onClick={() => setSelectedUser(null)} className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
                         <div className="px-10 pb-10 -mt-16 text-center">
                             <div className="w-32 h-32 rounded-[2.5rem] bg-white dark:bg-gray-800 border-8 border-white dark:border-gray-900 mx-auto shadow-2xl flex items-center justify-center overflow-hidden">
-                                <div className="text-4xl font-black text-indigo-600">{selectedUser.name.charAt(0)}</div>
+                                <div className="text-4xl font-black text-blue-600">{selectedUser.name.charAt(0)}</div>
                             </div>
                             <h3 className="text-3xl font-black text-gray-900 dark:text-white mt-6 tracking-tight">{selectedUser.name}</h3>
-                            <p className="text-indigo-600 dark:text-indigo-400 font-black uppercase tracking-widest text-sm mt-1">{selectedUser.role}</p>
+                            <p className="text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest text-sm mt-1">{selectedUser.role}</p>
 
                             <div className="mt-8 space-y-4 text-left bg-gray-50 dark:bg-gray-800/50 p-6 rounded-3xl border border-gray-100 dark:border-gray-700">
                                 <div className="flex justify-between items-center">
@@ -409,7 +409,7 @@ function UsersContent() {
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Kelas</span>
-                                    <span className="font-black text-indigo-600 dark:text-indigo-400">{selectedUser.kelas}</span>
+                                    <span className="font-black text-blue-600 dark:text-blue-400">{selectedUser.kelas}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Lahir</span>
