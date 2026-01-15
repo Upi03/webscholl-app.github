@@ -39,10 +39,13 @@ export default function Navbar() {
         }
     }, [searchQuery]);
 
-    // Keyboard Shortcut Ctrl+K
+    // Keyboard Shortcuts (Ctrl+K and K)
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.ctrlKey && e.key === 'k') {
+            // Focus if Ctrl+K or just 'k' (when not in an input)
+            const isInput = e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement;
+
+            if ((e.ctrlKey && e.key === 'k') || (e.key === 'k' && !isInput)) {
                 e.preventDefault();
                 document.getElementById('global-search')?.focus();
             }
@@ -50,6 +53,12 @@ export default function Navbar() {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && searchResults.length > 0) {
+            handleResultClick(searchResults[0].path);
+        }
+    };
 
     const handleResultClick = (path: string) => {
         router.push(path);
@@ -103,14 +112,15 @@ export default function Navbar() {
                             id="global-search"
                             type="text"
                             className="block w-full pl-10 pr-12 py-2 border-2 border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 rounded-2xl text-sm outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all dark:text-white font-medium shadow-sm"
-                            placeholder="Cari fitur atau nama siswa... (Ctrl+K)"
+                            placeholder="Cari fitur atau nama siswa... (K)"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={handleKeyDown}
                             onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
                             onFocus={() => searchQuery.length > 1 && setIsSearchOpen(true)}
                         />
                         <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                            <span className="text-[10px] font-bold text-gray-400 border border-gray-200 dark:border-gray-700 px-1.5 py-0.5 rounded-lg bg-white dark:bg-gray-900 shadow-sm">⌘K</span>
+                            <span className="text-[10px] font-bold text-gray-400 border border-gray-200 dark:border-gray-700 px-1.5 py-0.5 rounded-lg bg-white dark:bg-gray-900 shadow-sm">K</span>
                         </div>
                     </div>
 
