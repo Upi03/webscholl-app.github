@@ -6,7 +6,7 @@
     - [x] Implement Role-Based View Switching <!-- id: 3 -->
     - [x] Create Teacher View (List & Grading Interface) <!-- id: 4 -->
     - [x] Create Student View (List & Upload Interface) <!-- id: 5 -->
-- [ ] Verify functionality for both roles <!-- id: 6 -->
+- [x] Verify functionality for both roles <!-- id: 6 -->
 
 # Visual Rebranding
-- [ ] Change color scheme from Indigo to School Blue <!-- id: 7 -->
+- [x] Change color scheme from Indigo to School Blue <!-- id: 7 -->
