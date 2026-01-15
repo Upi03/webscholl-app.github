@@ -1,65 +1,173 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+
+
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import Navbar from "./components/Navbar"
+import Sidebar from "./components/Sidebar"
+
+import StudentDashboard from "./components/StudentDashboard";
+
+export default function HomePage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState<{ username?: string; role?: string } | null>(null);
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const storedUser = localStorage.getItem("currentUser");
+
+    if (!isLoggedIn) {
+      router.push("/login");
+    } else {
+      if (storedUser) {
+        setUserData(JSON.parse(storedUser));
+      }
+      setLoading(false);
+    }
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
+      {/* Navbar with Gradient */}
+      <Navbar />
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <Sidebar />
+
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900 transition-colors duration-300">
+          {userData?.role === "student" ? (
+            <StudentDashboard userData={userData} />
+          ) : (
+            <div className="max-w-6xl mx-auto space-y-8">
+
+
+
+              {/* Hero / Welcome Section */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden transition-colors duration-300">
+                <div className="relative z-10">
+                  <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Selamat Datang di Portal Sekolah, {userData?.username || "Admin"}! 👋</h2>
+                  <p className="text-gray-500 dark:text-gray-400 max-w-xl">
+                    Pantau aktivitas akademik, data siswa, dan administrasi sekolah dengan mudah dalam satu dashboard terintegrasi.
+                  </p>
+                </div>
+                <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-blue-50 dark:bg-blue-900/20 rounded-full blur-3xl opacity-50"></div>
+                <div className="absolute bottom-0 right-20 -mb-10 w-24 h-24 bg-purple-50 dark:bg-purple-900/20 rounded-full blur-2xl opacity-50"></div>
+              </div>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Card 1 */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow duration-200 group transition-colors">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2.5 py-0.5 rounded-full flex items-center">
+                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                      12.5%
+                    </span>
+                  </div>
+                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Siswa</h3>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">1,250</p>
+                </div>
+
+                {/* Card 2 */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow duration-200 group transition-colors">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="p-2 bg-purple-50 dark:bg-purple-900/30 rounded-lg text-purple-600 dark:text-purple-400 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2.5 py-0.5 rounded-full flex items-center">
+                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                      8.2%
+                    </span>
+                  </div>
+                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Guru</h3>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">45</p>
+                </div>
+
+                {/* Card 3 */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow duration-200 group transition-colors">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="p-2 bg-orange-50 dark:bg-orange-900/30 rounded-lg text-orange-600 dark:text-orange-400 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 px-2.5 py-0.5 rounded-full flex items-center">
+                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                      2.1%
+                    </span>
+                  </div>
+                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Kelas Aktif</h3>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">32</p>
+                </div>
+              </div>
+
+              {/* About Web Project Section */}
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-white">Tentang Web Sekolah Ini</h3>
+                </div>
+                <div className="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
+                  <p className="mb-4">
+                    Website ini adalah sistem manajemen sekolah modern yang dirancang untuk memudahkan administrasi akademik.
+                    Dibangun dengan teknologi terkini untuk memastikan kecepatan, keamanan, dan kemudahan penggunaan.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Fitur Utama</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Manajemen Data Siswa & Guru</li>
+                        <li>Sistem Informasi Akademik</li>
+                        <li>Berita & Pengumuman Sekolah</li>
+                        <li>Galeri Kegiatan Sekolah</li>
+                      </ul>
+                    </div>
+                    <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                      <h4 className="font-bold text-purple-700 dark:text-purple-300 mb-2">Teknologi</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Next.js & React Framework</li>
+                        <li>Tailwind CSS Styling</li>
+                        <li>PWA Ready (Mobile Support)</li>
+                        <li>Realtime Database</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              {/* Skeleton Demo Section Removed */}
+            </div>
+          )}
+        </main>
+      </div>
+
+      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 py-6 text-center text-sm transition-colors duration-300">
+        <div className="container mx-auto">
+          <p>&copy; 2026 WebSchooll App. Created with Next.js & Tailwind by UBIG.</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </footer>
     </div>
-  );
+
+  )
 }

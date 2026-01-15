@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
@@ -12,15 +13,38 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Fix for browser autofill legibility */
+/* The goal is to make it look "transparent" or at least match the theme perfectly */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  /* This transition delays the background-color change indefinitely */
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #111827 !important;
+  /* Forces visible text in light mode */
+  /* Remove the box-shadow trick to let it be more natural, or use solid white for light mode */
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #111827 inset !important;
+}
+
+/* Ensure caret is always visible */
+input {
+  caret-color: currentColor;
 }

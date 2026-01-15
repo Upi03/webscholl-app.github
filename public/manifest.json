@@ -1,0 +1,79 @@
+{
+    "name": "WebSchooll App",
+    "short_name": "WebSchooll",
+    "description": "Portal manajemen sekolah modern.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4f46e5",
+    "orientation": "portrait-primary",
+    "categories": [
+        "productivity",
+        "business",
+        "utilities"
+    ],
+    "icons": [
+        {
+            "src": "/next.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/next.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Dashboard",
+            "short_name": "Home",
+            "description": "Open dashboard",
+            "url": "/",
+            "icons": [
+                {
+                    "src": "/next.svg",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "short_name": "Users",
+            "description": "Manage users",
+            "url": "/users",
+            "icons": [
+                {
+                    "src": "/next.svg",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Analytics",
+            "short_name": "Analytics",
+            "description": "View analytics",
+            "url": "/analytics",
+            "icons": [
+                {
+                    "src": "/next.svg",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "PWA Settings",
+            "short_name": "PWA",
+            "description": "PWA settings",
+            "url": "/pwa",
+            "icons": [
+                {
+                    "src": "/next.svg",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
+}
