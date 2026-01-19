@@ -34,8 +34,10 @@ export default function AssignmentsPage() {
     const [role, setRole] = useState<string | null>(null)
     const [assignments, setAssignments] = useState<Assignment[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
     const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null)
+    const [newAssignment, setNewAssignment] = useState({ subject: "", title: "", deadline: "" })
 
     useEffect(() => {
         const userData = localStorage.getItem("currentUser")
@@ -70,6 +72,27 @@ export default function AssignmentsPage() {
         setIsModalOpen(false)
     }
 
+    const handleCreateAssignment = () => {
+        if (!newAssignment.subject || !newAssignment.title || !newAssignment.deadline) {
+            setToast({ message: "Harap isi semua bidang!", type: "error" })
+            return
+        }
+
+        const newId = Math.max(...assignments.map(a => a.id), 0) + 1
+        const assignmentRecord: Assignment = {
+            id: newId,
+            subject: newAssignment.subject,
+            title: newAssignment.title,
+            deadline: newAssignment.deadline,
+            status: "Belum Dikerjakan"
+        }
+
+        setAssignments([assignmentRecord, ...assignments])
+        setIsCreateModalOpen(false)
+        setNewAssignment({ subject: "", title: "", deadline: "" })
+        setToast({ message: "Tugas baru berhasil dibuat!", type: "success" })
+    }
+
     if (!role) return <div className="p-8 text-center text-gray-500">Loading assignments...</div>
 
     return (
@@ -88,7 +111,10 @@ export default function AssignmentsPage() {
                                 {role === "student" ? "Tugas & PR" : "Penilaian Tugas Siswa"}
                             </h1>
                             {role === "teacher" && (
-                                <button className="bg-blue-600 text-white px-6 py-2.5 rounded-xl shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5 font-medium">
+                                <button
+                                    onClick={() => setIsCreateModalOpen(true)}
+                                    className="bg-blue-600 text-white px-6 py-2.5 rounded-xl shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5 font-medium"
+                                >
                                     + Buat Tugas Baru
                                 </button>
                             )}
@@ -176,6 +202,70 @@ export default function AssignmentsPage() {
                                 </table>
                             </div>
                         </div>
+
+                        {/* Teacher's Create Assignment Modal */}
+                        {isCreateModalOpen && (
+                            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[60] animate-fade-in">
+                                <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-lg w-full shadow-2xl transform transition-all scale-100 border border-gray-100 dark:border-gray-700">
+                                    <div className="flex justify-between items-start mb-6">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Buat Tugas Baru</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Isi detail tugas di bawah ini.</p>
+                                        </div>
+                                        <button onClick={() => setIsCreateModalOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                        </button>
+                                    </div>
+
+                                    <div className="space-y-4 mb-8">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Mata Pelajaran</label>
+                                            <input
+                                                type="text"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+                                                placeholder="Contoh: Matematika"
+                                                value={newAssignment.subject}
+                                                onChange={(e) => setNewAssignment({ ...newAssignment, subject: e.target.value })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Tugas</label>
+                                            <input
+                                                type="text"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+                                                placeholder="Contoh: Latihan Trigonometri"
+                                                value={newAssignment.title}
+                                                onChange={(e) => setNewAssignment({ ...newAssignment, title: e.target.value })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Deadline</label>
+                                            <input
+                                                type="date"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+                                                value={newAssignment.deadline}
+                                                onChange={(e) => setNewAssignment({ ...newAssignment, deadline: e.target.value })}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+                                        <button
+                                            onClick={() => setIsCreateModalOpen(false)}
+                                            className="px-5 py-2.5 rounded-xl text-gray-700 dark:text-gray-200 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        >
+                                            Batal
+                                        </button>
+                                        <button
+                                            onClick={handleCreateAssignment}
+                                            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5"
+                                        >
+                                            Simpan Tugas
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Upload Modal for Student - IMPROVED STYLING */}
                         {isModalOpen && (
