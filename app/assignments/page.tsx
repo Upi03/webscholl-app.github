@@ -62,6 +62,13 @@ export default function AssignmentsPage() {
     }
 
     const handleGradingChange = (id: number, newScore: string) => {
+        if (newScore === "") {
+            setAssignments((prev) =>
+                prev.map((item) => (item.id === id ? { ...item, score: 0, status: "Sudah Dikumpulkan" } : item))
+            )
+            return
+        }
+
         let scoreValue = Number(newScore)
 
         // Clamp value between 0 and 100
@@ -188,9 +195,10 @@ export default function AssignmentsPage() {
                                                             min="0"
                                                             max="100"
                                                             className="w-20 px-3 py-1.5 border rounded-lg text-black dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                                            defaultValue={item.score}
+                                                            value={item.score === 0 && item.status !== "Dinilai" ? "" : item.score}
                                                             placeholder="0-100"
                                                             onChange={(e) => handleGradingChange(item.id, e.target.value)}
+                                                            onWheel={(e) => (e.target as HTMLInputElement).blur()}
                                                         />
                                                     )}
                                                 </td>
