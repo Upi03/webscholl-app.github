@@ -62,8 +62,14 @@ export default function AssignmentsPage() {
     }
 
     const handleGradingChange = (id: number, newScore: string) => {
+        let scoreValue = Number(newScore)
+
+        // Clamp value between 0 and 100
+        if (scoreValue > 100) scoreValue = 100
+        if (scoreValue < 0) scoreValue = 0
+
         setAssignments((prev) =>
-            prev.map((item) => (item.id === id ? { ...item, score: Number(newScore), status: "Dinilai" } : item))
+            prev.map((item) => (item.id === id ? { ...item, score: scoreValue, status: "Dinilai" } : item))
         )
     }
 
@@ -179,6 +185,8 @@ export default function AssignmentsPage() {
                                                     ) : (
                                                         <input
                                                             type="number"
+                                                            min="0"
+                                                            max="100"
                                                             className="w-20 px-3 py-1.5 border rounded-lg text-black dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none transition"
                                                             defaultValue={item.score}
                                                             placeholder="0-100"
