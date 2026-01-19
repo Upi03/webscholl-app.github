@@ -74,7 +74,7 @@ export default function ContactPage() {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 text-center">
                                 <p className="text-xs text-gray-400 uppercase tracking-widest font-bold mb-1">Email</p>
-                                <p className="text-sm font-medium text-blue-600 dark:text-blue-400">info@websekolah.id</p>
+                                <p className="text-sm font-medium text-blue-600 dark:text-blue-400">SmkNegeri99@gmail.com</p>
                             </div>
                             <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 text-center">
                                 <p className="text-xs text-gray-400 uppercase tracking-widest font-bold mb-1">Telepon</p>
