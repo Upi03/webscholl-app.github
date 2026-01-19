@@ -253,7 +253,7 @@ function UsersContent() {
                                                     <td className="px-8 py-8 text-sm font-bold text-gray-400 dark:text-gray-500">{user.id}</td>
                                                     <td className="px-8 py-8 text-lg font-black text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">{user.name}</td>
                                                     <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-bold">{user.email}</td>
-                                                    <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-black">{user.kelas}</td>
+                                                    <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-black">{user.role === 'Siswa' ? user.kelas : '-'}</td>
                                                     <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-bold italic">
                                                         {new Date(user.tanggalLahir).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                                                     </td>
@@ -337,17 +337,19 @@ function UsersContent() {
                                         placeholder="user@sekolah.com"
                                     />
                                 </div>
-                                <div className="space-y-3">
-                                    <label className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Kelas</label>
-                                    <select
-                                        value={newUser.kelas}
-                                        onChange={(e) => setNewUser({ ...newUser, kelas: e.target.value })}
-                                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
-                                    >
-                                        <option>XII-RPL</option>
-                                        <option>XI-TKJ</option>
-                                    </select>
-                                </div>
+                                {newUser.role === "Siswa" && (
+                                    <div className="space-y-3">
+                                        <label className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Kelas</label>
+                                        <select
+                                            value={newUser.kelas}
+                                            onChange={(e) => setNewUser({ ...newUser, kelas: e.target.value })}
+                                            className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
+                                        >
+                                            <option>XII-RPL</option>
+                                            <option>XI-TKJ</option>
+                                        </select>
+                                    </div>
+                                )}
                                 <div className="space-y-3">
                                     <label className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Role Utama</label>
                                     <select
@@ -366,6 +368,8 @@ function UsersContent() {
                                         type="date"
                                         required
                                         value={newUser.tanggalLahir}
+                                        min="1950-01-01"
+                                        max="2025-12-31"
                                         onChange={(e) => setNewUser({ ...newUser, tanggalLahir: e.target.value })}
                                         className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30 text-gray-900 dark:text-white outline-none focus:border-blue-500/30 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold"
                                     />
@@ -407,10 +411,12 @@ function UsersContent() {
                                     <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Email</span>
                                     <span className="font-bold text-gray-700 dark:text-white truncate max-w-[200px]">{selectedUser.email}</span>
                                 </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Kelas</span>
-                                    <span className="font-black text-blue-600 dark:text-blue-400">{selectedUser.kelas}</span>
-                                </div>
+                                {selectedUser.role === "Siswa" && (
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Kelas</span>
+                                        <span className="font-black text-blue-600 dark:text-blue-400">{selectedUser.kelas}</span>
+                                    </div>
+                                )}
                                 <div className="flex justify-between items-center">
                                     <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Lahir</span>
                                     <span className="font-bold text-gray-700 dark:text-white">

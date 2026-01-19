@@ -110,7 +110,7 @@ export default function AssignmentsPage() {
                             <h1 className="text-3xl font-bold text-gray-800 dark:text-white tracking-tight">
                                 {role === "student" ? "Tugas & PR" : "Penilaian Tugas Siswa"}
                             </h1>
-                            {role === "teacher" && (
+                            {role !== "student" && (
                                 <button
                                     onClick={() => setIsCreateModalOpen(true)}
                                     className="bg-blue-600 text-white px-6 py-2.5 rounded-xl shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5 font-medium"
@@ -131,7 +131,7 @@ export default function AssignmentsPage() {
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                                 Judul Tugas
                                             </th>
-                                            {role === "teacher" && (
+                                            {role !== "student" && (
                                                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                                     Nama Siswa
                                                 </th>
@@ -157,7 +157,7 @@ export default function AssignmentsPage() {
                                             <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{item.subject}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">{item.title}</td>
-                                                {role === "teacher" && (
+                                                {role !== "student" && (
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">{item.studentName}</td>
                                                 )}
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 font-mono">{item.deadline}</td>
