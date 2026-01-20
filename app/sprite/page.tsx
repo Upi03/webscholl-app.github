@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface SocialIcon {
     name: string;
@@ -11,6 +12,7 @@ interface SocialIcon {
 }
 
 export default function SpritePage() {
+    const { t } = useLanguage();
     const [selectedIcon, setSelectedIcon] = useState<SocialIcon | null>(null);
 
     const icons: SocialIcon[] = [
@@ -41,8 +43,8 @@ export default function SpritePage() {
                     <div className="max-w-6xl mx-auto p-8 md:p-12">
                         {/* Header */}
                         <div className="mb-12">
-                            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Sosial Media Icons</h1>
-                            <p className="text-gray-500 dark:text-gray-400 mt-2 text-lg">Css Sprite Sheet</p>
+                            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{t.sprite_page.title}</h1>
+                            <p className="text-gray-500 dark:text-gray-400 mt-2 text-lg">{t.sprite_page.subtitle}</p>
                         </div>
 
                         {/* Grid */}
@@ -85,13 +87,13 @@ export default function SpritePage() {
                                 </div>
                                 <div className="flex-1 flex flex-col justify-center text-center md:text-left">
                                     <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-2">{selectedIcon.name}</h2>
-                                    <p className="text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest mb-6">Preview</p>
+                                    <p className="text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest mb-6">{t.sprite_page.preview}</p>
                                     <div>
                                         <button
                                             onClick={() => setSelectedIcon(null)}
                                             className="px-10 py-4 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white rounded-2xl font-black transition-all active:scale-95"
                                         >
-                                            Close
+                                            {t.sprite_page.close}
                                         </button>
                                     </div>
                                 </div>

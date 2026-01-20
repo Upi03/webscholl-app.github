@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "@/app/contexts/LanguageContext"
 import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar"
 
@@ -11,6 +12,8 @@ import StudentDashboard from "./components/StudentDashboard";
 
 export default function HomePage() {
   const router = useRouter();
+  console.log("DEBUG: HomePage rendering. Calling useLanguage...");
+  const { t, language } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState<{ username?: string; role?: string } | null>(null);
 
@@ -48,7 +51,7 @@ export default function HomePage() {
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900 transition-colors duration-300">
           {userData?.role === "student" ? (
-            <StudentDashboard userData={userData} />
+            <StudentDashboard key={language} userData={userData} />
           ) : (
             <div className="max-w-6xl mx-auto space-y-8">
 
@@ -57,9 +60,9 @@ export default function HomePage() {
               {/* Hero / Welcome Section */}
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden transition-colors duration-300">
                 <div className="relative z-10">
-                  <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Selamat Datang di Portal Sekolah, {userData?.username || "Admin"}! 👋</h2>
+                  <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">{t.dashboard.welcome_hero}, {userData?.username || "Admin"}! 👋</h2>
                   <p className="text-gray-500 dark:text-gray-400 max-w-xl">
-                    Pantau aktivitas akademik, data siswa, dan administrasi sekolah dengan mudah dalam satu dashboard terintegrasi.
+                    {t.dashboard.hero_desc}
                   </p>
                 </div>
                 <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-blue-50 dark:bg-blue-900/20 rounded-full blur-3xl opacity-50"></div>
@@ -82,7 +85,7 @@ export default function HomePage() {
                       12.5%
                     </span>
                   </div>
-                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Siswa</h3>
+                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.dashboard.total_students}</h3>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">1,250</p>
                 </div>
 
@@ -99,7 +102,7 @@ export default function HomePage() {
                       8.2%
                     </span>
                   </div>
-                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Guru</h3>
+                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.dashboard.total_teachers}</h3>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">45</p>
                 </div>
 
@@ -116,7 +119,7 @@ export default function HomePage() {
                       2.1%
                     </span>
                   </div>
-                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Kelas Aktif</h3>
+                  <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.dashboard.active_classes}</h3>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">32</p>
                 </div>
               </div>
@@ -124,30 +127,27 @@ export default function HomePage() {
               {/* About Web Project Section */}
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-gray-800 dark:text-white">Tentang Web Sekolah Ini</h3>
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-white">{t.dashboard.about_title}</h3>
                 </div>
                 <div className="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
                   <p className="mb-4">
-                    Website ini adalah sistem manajemen sekolah modern yang dirancang untuk memudahkan administrasi akademik.
-                    Dibangun dengan teknologi terkini untuk memastikan kecepatan, keamanan, dan kemudahan penggunaan.
+                    {t.dashboard.about_desc}
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Fitur Utama</h4>
+                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">{t.dashboard.features_title}</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
-                        <li>Manajemen Data Siswa & Guru</li>
-                        <li>Sistem Informasi Akademik</li>
-                        <li>Berita & Pengumuman Sekolah</li>
-                        <li>Galeri Kegiatan Sekolah</li>
+                        {t.dashboard.features_list.map((feature: string, i: number) => (
+                          <li key={i}>{feature}</li>
+                        ))}
                       </ul>
                     </div>
                     <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                      <h4 className="font-bold text-purple-700 dark:text-purple-300 mb-2">Teknologi</h4>
+                      <h4 className="font-bold text-purple-700 dark:text-purple-300 mb-2">{t.dashboard.tech_title}</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
-                        <li>Next.js & React Framework</li>
-                        <li>Tailwind CSS Styling</li>
-                        <li>PWA Ready (Mobile Support)</li>
-                        <li>Realtime Database</li>
+                        {t.dashboard.tech_list.map((tech: string, i: number) => (
+                          <li key={i}>{tech}</li>
+                        ))}
                       </ul>
                     </div>
                   </div>

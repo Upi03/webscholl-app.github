@@ -3,15 +3,17 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 export default function TeachersPage() {
-    const [teachers] = useState([
-        { id: 1, name: "Budi Santoso", subject: "Matematika", nip: "198501012010011001", status: "Active" },
-        { id: 2, name: "Siti Aminah", subject: "Bahasa Indonesia", nip: "199002022015022002", status: "Active" },
-        { id: 3, name: "Ahmad Dahlan", subject: "IPA", nip: "198803032012031003", status: "On Leave" },
-        { id: 4, name: "Dewi Sartika", subject: "Bahasa Inggris", nip: "199204042018042004", status: "Active" },
-        { id: 5, name: "Ki Hajar Dewantara", subject: "Sejarah", nip: "198005052005051005", status: "Retired" },
-    ]);
+    const { t } = useLanguage();
+    const teachers = React.useMemo(() => [
+        { id: 1, name: "Budi Santoso", subject: t.teachers.math, nip: "198501012010011001", status: "Active" },
+        { id: 2, name: "Siti Aminah", subject: t.teachers.indo, nip: "199002022015022002", status: "Active" },
+        { id: 3, name: "Ahmad Dahlan", subject: t.teachers.science, nip: "198803032012031003", status: "On Leave" },
+        { id: 4, name: "Dewi Sartika", subject: t.teachers.english, nip: "199204042018042004", status: "Active" },
+        { id: 5, name: "Ki Hajar Dewantara", subject: t.teachers.history, nip: "198005052005051005", status: "Retired" },
+    ], [t]);
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
@@ -22,11 +24,11 @@ export default function TeachersPage() {
                     <div className="max-w-6xl mx-auto space-y-6">
                         <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
                             <div>
-                                <h1 className="text-2xl font-black text-gray-900 dark:text-white">Data Guru</h1>
-                                <p className="text-gray-500 dark:text-gray-400">Kelola data pengajar di sekolah.</p>
+                                <h1 className="text-2xl font-black text-gray-900 dark:text-white">{t.teachers.title}</h1>
+                                <p className="text-gray-500 dark:text-gray-400">{t.teachers.subtitle}</p>
                             </div>
                             <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-600/20">
-                                + Tambah Guru
+                                {t.teachers.add_button}
                             </button>
                         </div>
 
@@ -35,11 +37,11 @@ export default function TeachersPage() {
                                 <table className="w-full text-left text-sm">
                                     <thead className="bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">
                                         <tr>
-                                            <th className="px-6 py-4">Nama Lengkap</th>
-                                            <th className="px-6 py-4">NIP</th>
-                                            <th className="px-6 py-4">Mata Pelajaran</th>
-                                            <th className="px-6 py-4">Status</th>
-                                            <th className="px-6 py-4 text-right">Aksi</th>
+                                            <th className="px-6 py-4">{t.teachers.name}</th>
+                                            <th className="px-6 py-4">{t.teachers.nip}</th>
+                                            <th className="px-6 py-4">{t.teachers.subject}</th>
+                                            <th className="px-6 py-4">{t.teachers.status}</th>
+                                            <th className="px-6 py-4 text-right">{t.teachers.action}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -66,7 +68,7 @@ export default function TeachersPage() {
                                                             ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                                                             : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
                                                         }`}>
-                                                        {teacher.status}
+                                                        {teacher.status === "Active" ? t.common_status.active : teacher.status === "Retired" ? t.common_status.retired : t.common_status.on_leave}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-right space-x-2">

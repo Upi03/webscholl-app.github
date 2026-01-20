@@ -5,8 +5,10 @@ import { useSearchParams } from "next/navigation";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { STUDENTS_DATA, Student } from "../../lib/dummyData";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 function StudentsContent() {
+    const { t } = useLanguage();
     const searchParams = useSearchParams();
     const search = searchParams.get("search") || "";
     const [filteredStudents, setFilteredStudents] = useState<Student[]>(STUDENTS_DATA);
@@ -27,13 +29,13 @@ function StudentsContent() {
             <div className="max-w-6xl mx-auto space-y-6">
                 <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
                     <div>
-                        <h1 className="text-2xl font-black text-gray-900 dark:text-white">Data Siswa</h1>
+                        <h1 className="text-2xl font-black text-gray-900 dark:text-white">{t.students_page.title}</h1>
                         <p className="text-gray-500 dark:text-gray-400">
-                            {search ? `Menampilkan hasil pencarian untuk "${search}"` : "Kelola data siswa-siswi sekolah."}
+                            {search ? `${t.students_page.search_results} "${search}"` : t.students_page.subtitle}
                         </p>
                     </div>
                     <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-600/20">
-                        + Tambah Siswa
+                        {t.students_page.add_button}
                     </button>
                 </div>
 
@@ -42,11 +44,11 @@ function StudentsContent() {
                         <table className="w-full text-left text-sm">
                             <thead className="bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">
                                 <tr>
-                                    <th className="px-6 py-4">Nama Lengkap</th>
-                                    <th className="px-6 py-4">NIS</th>
-                                    <th className="px-6 py-4">Kelas</th>
-                                    <th className="px-6 py-4">Status</th>
-                                    <th className="px-6 py-4 text-right">Aksi</th>
+                                    <th className="px-6 py-4">{t.students_page.name}</th>
+                                    <th className="px-6 py-4">{t.students_page.nis}</th>
+                                    <th className="px-6 py-4">{t.students_page.class}</th>
+                                    <th className="px-6 py-4">{t.students_page.status}</th>
+                                    <th className="px-6 py-4 text-right">{t.students_page.action}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -73,7 +75,7 @@ function StudentsContent() {
                                                     ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                                                     : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
                                                 }`}>
-                                                {student.status}
+                                                {student.status === "Active" ? t.common_status.active : student.status === "Suspended" ? t.common_status.suspended : t.common_status.inactive}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-right space-x-2">
@@ -88,7 +90,7 @@ function StudentsContent() {
                                 )) : (
                                     <tr>
                                         <td colSpan={5} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                            Tidak ada data siswa yang ditemukan.
+                                            {t.students_page.not_found}
                                         </td>
                                     </tr>
                                 )}
@@ -102,12 +104,13 @@ function StudentsContent() {
 }
 
 export default function StudentsPage() {
+    const { t } = useLanguage();
     return (
         <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
             <Navbar />
             <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
-                <Suspense fallback={<div className="flex-1 flex items-center justify-center">Loading...</div>}>
+                <Suspense fallback={<div className="flex-1 flex items-center justify-center font-bold text-gray-500">{t.common.loading || 'Loading...'}</div>}>
                     <StudentsContent />
                 </Suspense>
             </div>

@@ -8,8 +8,10 @@ import ServerSide from "../components/ServerSide";
 import PreviewCard from "../components/PreviewCard";
 import WebPConversion from "../components/WebPConversion";
 import FinalComparison from "../components/FinalComparison";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function ImageCompressionPage() {
+    const { t } = useLanguage();
     const [originalSize, setOriginalSize] = React.useState<number>(0);
     const [compressedFile, setCompressedFile] = React.useState<File | null>(null);
     const [thumbnailFile, setThumbnailFile] = React.useState<File | null>(null);
@@ -47,9 +49,9 @@ export default function ImageCompressionPage() {
                         {/* Header Section */}
                         <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden transition-colors duration-300">
                             <div className="relative z-10">
-                                <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Image Compression 🖼️</h2>
+                                <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">{t.compression_page.title} 🖼️</h2>
                                 <p className="text-gray-500 dark:text-gray-400 max-w-xl">
-                                    Optimalkan ukuran gambar Anda dengan cepat dan mudah langsung di browser. Privasi Anda terjaga karena proses kompresi dilakukan secara lokal.
+                                    {t.compression_page.subtitle}
                                 </p>
                             </div>
                             <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-blue-50 dark:bg-blue-900/20 rounded-full blur-3xl opacity-50"></div>
@@ -88,7 +90,7 @@ export default function ImageCompressionPage() {
                                 {compressedFile && (
                                     <div className="animate-fade-in">
                                         <PreviewCard
-                                            title="Original Format (Compressed)"
+                                            title={t.compression_page.original_format}
                                             file={compressedFile}
                                         />
                                     </div>
@@ -97,7 +99,7 @@ export default function ImageCompressionPage() {
                                 {webpFile && (
                                     <div className="animate-fade-in">
                                         <PreviewCard
-                                            title="WebP Format"
+                                            title={t.compression_page.webp_format}
                                             file={webpFile}
                                             comparisonSize={compressedFile?.size}
                                         />
@@ -120,7 +122,7 @@ export default function ImageCompressionPage() {
                                         <svg className="w-12 h-12 mb-3 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
-                                        <p className="text-sm">Preview akan muncul di sini</p>
+                                        <p className="text-sm">{t.compression_page.preview_title}</p>
                                     </div>
                                 )}
                             </div>
@@ -133,20 +135,20 @@ export default function ImageCompressionPage() {
                                     <svg className="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    Kenapa Kompres Gambar?
+                                    {t.compression_page.why_title}
                                 </h3>
                                 <ul className="text-sm text-gray-500 dark:text-gray-400 space-y-2">
                                     <li className="flex items-start">
                                         <span className="text-blue-500 mr-2">•</span>
-                                        Mempercepat waktu pemuatan halaman website.
+                                        {t.compression_page.why_1}
                                     </li>
                                     <li className="flex items-start">
                                         <span className="text-blue-500 mr-2">•</span>
-                                        Menghemat ruang penyimpanan server dan client.
+                                        {t.compression_page.why_2}
                                     </li>
                                     <li className="flex items-start">
                                         <span className="text-blue-500 mr-2">•</span>
-                                        Meningkatkan skor SEO website Anda.
+                                        {t.compression_page.why_3}
                                     </li>
                                 </ul>
                             </div>
@@ -155,10 +157,10 @@ export default function ImageCompressionPage() {
                                     <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                     </svg>
-                                    Aman & Privat
+                                    {t.compression_page.safe_title}
                                 </h3>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Gambar Anda tidak pernah dikirim ke server kami. Semua proses kompresi terjadi di dalam browser Anda menggunakan teknologi Web Worker.
+                                    {t.compression_page.safe_desc}
                                 </p>
                             </div>
                         </div>

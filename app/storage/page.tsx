@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
     Database,
     User,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 
 export default function StoragePage() {
+    const { t } = useLanguage();
     const [userName, setUserName] = useState('');
     const [theme, setTheme] = useState('light');
     const [searchFilter, setSearchFilter] = useState('');
@@ -92,10 +94,10 @@ export default function StoragePage() {
                                     <div className="p-2 bg-indigo-600 rounded-xl">
                                         <Database className="w-6 h-6 text-white" />
                                     </div>
-                                    Web Storage
+                                    {t.storage_page.title}
                                 </h1>
                                 <p className="text-gray-500 dark:text-gray-400 font-bold mt-1 uppercase tracking-widest text-xs">
-                                    Local & Session Storage Management
+                                    {t.storage_page.subtitle}
                                 </p>
                             </div>
                             <button
@@ -103,7 +105,7 @@ export default function StoragePage() {
                                 className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-black shadow-xl shadow-red-500/20 active:scale-95 transition-all flex items-center gap-2 text-sm uppercase"
                             >
                                 <Trash2 className="w-4 h-4" />
-                                Hapus Semua Data
+                                {t.storage_page.clear_all}
                             </button>
                         </div>
 
@@ -112,7 +114,7 @@ export default function StoragePage() {
 
                             {/* Card: Username */}
                             <div className="bg-white dark:bg-gray-900 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
-                                <label className="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Nama Pengguna</label>
+                                <label className="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">{t.storage_page.username_label}</label>
                                 <div className="flex gap-3">
                                     <div className="relative flex-1">
                                         <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -120,7 +122,7 @@ export default function StoragePage() {
                                             type="text"
                                             value={userName}
                                             onChange={(e) => setUserName(e.target.value)}
-                                            placeholder="Masukan Nama..."
+                                            placeholder={t.storage_page.username_placeholder}
                                             className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all font-bold"
                                         />
                                     </div>
@@ -128,7 +130,7 @@ export default function StoragePage() {
                                         onClick={() => saveToLocal('userName', userName)}
                                         className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-black text-sm hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-600/20"
                                     >
-                                        Simpan
+                                        {t.common.save}
                                     </button>
                                 </div>
                                 <p className="mt-2 text-[10px] text-gray-400 font-bold italic">Simpan di Local Storage</p>
@@ -136,27 +138,27 @@ export default function StoragePage() {
 
                             {/* Card: Theme */}
                             <div className="bg-white dark:bg-gray-900 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
-                                <label className="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Tema</label>
+                                <label className="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">{t.storage_page.theme_label}</label>
                                 <div className="flex items-center gap-3">
                                     <div className="flex bg-gray-50 dark:bg-gray-800 p-1 rounded-2xl border border-gray-100 dark:border-gray-700">
                                         <button
                                             onClick={() => setTheme('light')}
                                             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black transition-all ${theme === 'light' ? 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-gray-400'}`}
                                         >
-                                            <Sun className="w-3.5 h-3.5" /> Light
+                                            <Sun className="w-3.5 h-3.5" /> {t.storage_page.theme_light}
                                         </button>
                                         <button
                                             onClick={() => setTheme('dark')}
                                             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black transition-all ${theme === 'dark' ? 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-gray-400'}`}
                                         >
-                                            <Moon className="w-3.5 h-3.5" /> Dark
+                                            <Moon className="w-3.5 h-3.5" /> {t.storage_page.theme_dark}
                                         </button>
                                     </div>
                                     <button
                                         onClick={() => saveToLocal('theme', theme)}
                                         className="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-xl font-black text-sm hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-600/20"
                                     >
-                                        Simpan
+                                        {t.common.save}
                                     </button>
                                 </div>
                                 <p className="mt-2 text-[10px] text-gray-400 font-bold italic">Simpan di Local Storage</p>
@@ -164,7 +166,7 @@ export default function StoragePage() {
 
                             {/* Card: Session Search */}
                             <div className="bg-white dark:bg-gray-900 p-6 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 transition-colors md:col-span-2">
-                                <label className="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Filter Pencarian</label>
+                                <label className="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">{t.storage_page.search_filter_label}</label>
                                 <div className="flex gap-3">
                                     <div className="relative flex-1">
                                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -172,7 +174,7 @@ export default function StoragePage() {
                                             type="text"
                                             value={searchFilter}
                                             onChange={(e) => setSearchFilter(e.target.value)}
-                                            placeholder="Masukan Filter..."
+                                            placeholder={t.storage_page.search_filter_placeholder}
                                             className="w-full pl-11 pr-4 py-4 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all font-bold"
                                         />
                                     </div>
@@ -181,10 +183,10 @@ export default function StoragePage() {
                                         className="px-10 py-4 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-600/20 uppercase tracking-widest"
                                     >
                                         <Save className="w-4 h-4 mb-0.5 inline mr-2" />
-                                        Simpan ke Session
+                                        {t.storage_page.save_session}
                                     </button>
                                 </div>
-                                <p className="mt-2 text-[10px] text-gray-400 font-bold italic">Data ini akan hilang saat browser ditutup / Session ditutup</p>
+                                <p className="mt-2 text-[10px] text-gray-400 font-bold italic">{t.storage_page.session_note}</p>
                             </div>
                         </div>
 
@@ -194,12 +196,12 @@ export default function StoragePage() {
                             className="w-full py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-[1.5rem] font-black shadow-2xl shadow-indigo-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3"
                         >
                             <RefreshCcw className="w-5 h-5" />
-                            Simpan Preferensi (Local Storage JSON)
+                            {t.storage_page.save_prefs}
                         </button>
 
                         {/* Data Display Section */}
                         <div className="space-y-6">
-                            <h2 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-widest">Data Tersimpan</h2>
+                            <h2 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-widest">{t.storage_page.saved_data_title}</h2>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
@@ -219,7 +221,7 @@ export default function StoragePage() {
                                                     </div>
                                                 ))
                                             ) : (
-                                                <p className="text-gray-400 italic text-center py-10 font-sans">Belum ada data di Local Storage</p>
+                                                <p className="text-gray-400 italic text-center py-10 font-sans">{t.storage_page.local_note}</p>
                                             )}
                                         </div>
                                     </div>
@@ -241,7 +243,7 @@ export default function StoragePage() {
                                                     </div>
                                                 ))
                                             ) : (
-                                                <p className="text-gray-400 italic text-center py-10 font-sans">Belum ada data di Session Storage</p>
+                                                <p className="text-gray-400 italic text-center py-10 font-sans">{t.storage_page.session_note_empty}</p>
                                             )}
                                         </div>
                                     </div>

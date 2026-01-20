@@ -2,18 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 export default function StudentDashboard({ userData }: { userData: any }) {
     const router = useRouter();
+    const { t } = useLanguage();
 
     return (
         <div className="max-w-6xl mx-auto space-y-8">
             {/* Hero / Welcome Section for Student */}
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-8 shadow-lg text-white relative overflow-hidden">
                 <div className="relative z-10">
-                    <h2 className="text-3xl font-extrabold mb-2">Halo, {userData?.username || "Siswa"}! 🎓</h2>
+                    <h2 className="text-3xl font-extrabold mb-2">{t.student_dashboard.greeting} {userData?.username || "Siswa"}! 🎓</h2>
                     <p className="text-blue-100 max-w-xl">
-                        Selamat datang di dashboard siswa. Cek jadwal pelajaran, tugas, dan nilai kamu di sini.
+                        {t.student_dashboard.welcome_desc}
                     </p>
                 </div>
                 <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-10 rounded-full blur-3xl"></div>
@@ -23,47 +25,36 @@ export default function StudentDashboard({ userData }: { userData: any }) {
             {/* Student Specific Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Kehadiran</h3>
+                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.student_dashboard.attendance}</h3>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">95%</p>
-                    <span className="text-xs text-green-500">Sangat Baik</span>
+                    <span className="text-xs text-green-500">{t.student_dashboard.attendance_good}</span>
                 </div>
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Tugas Pending</h3>
+                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.student_dashboard.pending_assignments}</h3>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">2</p>
-                    <span className="text-xs text-orange-500">Segera Kumpulkan</span>
+                    <span className="text-xs text-orange-500">{t.student_dashboard.assignments_soon}</span>
                 </div>
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Rata-rata Nilai</h3>
+                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.student_dashboard.average_score}</h3>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">88.5</p>
-                    <span className="text-xs text-blue-500">Pertahankan!</span>
+                    <span className="text-xs text-blue-500">{t.student_dashboard.keep_it_up}</span>
                 </div>
             </div>
 
             {/* Schedule / Timeline */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Jadwal Hari Ini</h3>
+                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">{t.student_dashboard.today_schedule}</h3>
                 <div className="space-y-4">
-                    <div className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors border-l-4 border-blue-500">
-                        <div className="w-20 text-sm font-bold text-gray-500">07:00</div>
-                        <div>
-                            <p className="font-bold text-gray-900 dark:text-white">Matematika</p>
-                            <p className="text-xs text-gray-500">Pak Budi - Ruang 10A</p>
+                    {t.student_dashboard.schedule_list.map((item) => (
+                        <div key={item.id} className={`flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors border-l-4 ${item.color === 'blue' ? 'border-blue-500' : item.color === 'green' ? 'border-green-500' : 'border-purple-500'
+                            }`}>
+                            <div className="w-20 text-sm font-bold text-gray-500">{item.time}</div>
+                            <div>
+                                <p className="font-bold text-gray-900 dark:text-white">{item.subject}</p>
+                                <p className="text-xs text-gray-500">{item.teacher} - {item.room}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors border-l-4 border-green-500">
-                        <div className="w-20 text-sm font-bold text-gray-500">09:30</div>
-                        <div>
-                            <p className="font-bold text-gray-900 dark:text-white">Bahasa Inggris</p>
-                            <p className="text-xs text-gray-500">Ms. Sarah - Lab Bahasa</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors border-l-4 border-purple-500">
-                        <div className="w-20 text-sm font-bold text-gray-500">11:00</div>
-                        <div>
-                            <p className="font-bold text-gray-900 dark:text-white">Fisika</p>
-                            <p className="text-xs text-gray-500">Bu Rina - Lab IPA</p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>

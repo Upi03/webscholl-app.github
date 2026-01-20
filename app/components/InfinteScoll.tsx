@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import CardSkeleton from "./CardSkeleton"
+import { useLanguage } from "@/app/contexts/LanguageContext"
 
 // Definisikan Tipe Data Item
 interface FeedItem {
@@ -13,6 +14,7 @@ interface FeedItem {
 }
 
 export default function InfiniteScroll() {
+    const { t } = useLanguage()
     const [items, setItems] = useState<FeedItem[]>([])
     const [page, setPage] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
@@ -37,43 +39,35 @@ export default function InfiniteScroll() {
             const id = (pageNum - 1) * 10 + index + 1;
             return {
                 id,
-                title: `Item ${id}`,
-                description: `Deskripsi untuk Item ${id}`,
-                content: `Isi ${index + 1} (Page ${pageNum})`,
+                title: `${t.news_page.item_title} ${id}`,
+                description: `${t.news_page.item_desc} ${id}`,
+                content: `${t.news_page.item_content} ${index + 1} (Page ${pageNum})`,
                 page: pageNum,
             };
         })
 
         return newItem;
-    }, [])
+    }, [t.news_page.item_content, t.news_page.item_desc, t.news_page.item_title])
 
     const fetchMoreData = useCallback(async () => {
         // Prevent multiple concurrent fetches
         if (isFetchingRef.current || isLoading || !hasMore) {
-            console.log("Skipping fetch - already in progress or no more data");
             return;
         }
 
         isFetchingRef.current = true;
-
-        console.log(`Fetching page ${page + 1}...`);
         setIsLoading(true);
         const nextPage = page + 1;
         const newItems = await fetchdata(nextPage);
-
-        console.log(`Fetched ${newItems.length} items.`);
 
         if (newItems.length === 0) {
             setHasMore(false);
         } else {
             setItems(prev => {
-                console.log("Appending items. Previous length:", prev.length, "New items:", newItems.length);
-
                 // Deduplicate: filter out items that already exist
                 const existingIds = new Set(prev.map(item => item.id));
                 const uniqueNewItems = newItems.filter(item => !existingIds.has(item.id));
 
-                console.log("Unique new items:", uniqueNewItems.length);
                 return [...prev, ...uniqueNewItems];
             });
             setPage(nextPage);
@@ -98,7 +92,6 @@ export default function InfiniteScroll() {
         const observer = new IntersectionObserver(
             async (entries) => {
                 if (entries[0].isIntersecting && !isFetchingRef.current) {
-                    console.log("Intersecting! Fetching more data...");
                     await fetchMoreData();
                 }
             },
@@ -119,21 +112,21 @@ export default function InfiniteScroll() {
 
     return (
         <div className="space-y-4 p-4 h-96 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg relative">
-            <div className="p-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 mb-4">
-                <p>Scroll <b>inside this box</b> to see more items.</p>
-                <p>Total Items: {items.length}</p>
+            <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 border-l-4 border-yellow-500 text-yellow-700 dark:text-yellow-300 mb-4 transition-colors">
+                <p>{t.news_page.scroll_hint}</p>
+                <p>{t.news_page.total_items}: {items.length}</p>
             </div>
 
             <div className="grid gap-4">
                 {items.map((item) => (
                     <div
                         key={item.id}
-                        className="p-4 border rounded-lg shadow-sm bg-white dark:bg-gray-800 transition-all hover:scale-[1.01]"
+                        className="p-4 border rounded-lg shadow-sm bg-white dark:bg-gray-800 transition-all hover:scale-[1.01] border-gray-100 dark:border-gray-700"
                         style={{ borderLeft: `5px solid hsl(${(item.id * 50) % 360}, 70%, 50%)` }}
                     >
-                        <h3 className="font-semibold text-lg">{item.title} (ID: {item.id})</h3>
+                        <h3 className="font-semibold text-lg text-gray-900 dark:text-white">{item.title} (ID: {item.id})</h3>
                         <p className="text-gray-600 dark:text-gray-300">{item.description}</p>
-                        <p className="mt-2 text-sm text-gray-500">{item.content}</p>
+                        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{item.content}</p>
                     </div>
                 ))}
             </div>
@@ -141,14 +134,14 @@ export default function InfiniteScroll() {
             {/* Sentinel Element */}
             <div ref={sentinelRef} className="h-20 flex items-center justify-center p-4">
                 {isLoading ? (
-                    <div className="flex items-center space-x-2 text-blue-600">
+                    <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-current"></div>
-                        <span>Loading more items...</span>
+                        <span>{t.news_page.loading_more}</span>
                     </div>
                 ) : !hasMore ? (
-                    <p className="text-gray-500 font-medium">No more items to load.</p>
+                    <p className="text-gray-500 dark:text-gray-400 font-medium">{t.news_page.no_more}</p>
                 ) : (
-                    <p className="text-gray-400 text-sm">Scroll for more...</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-sm">{t.news_page.scroll_for_more}</p>
                 )}
             </div>
         </div>

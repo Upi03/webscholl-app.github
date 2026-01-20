@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "../contexts/LanguageContext"
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/Sidebar"
 import Toast from "../components/Toast"
@@ -16,23 +17,24 @@ interface Assignment {
     studentName?: string // For teacher view
 }
 
-// Dummy Data
-const STUDENT_ASSIGNMENTS: Assignment[] = [
-    { id: 1, subject: "Matematika", title: "Latihan Aljabar Linear", deadline: "2026-01-20", status: "Belum Dikerjakan" },
-    { id: 2, subject: "Bahasa Indonesia", title: "Membuat Puisi", deadline: "2026-01-18", status: "Sudah Dikumpulkan" },
-    { id: 3, subject: "Fisika", title: "Laporan Praktikum Hukum Newton", deadline: "2026-01-15", status: "Dinilai", score: 85 },
-]
-
-const TEACHER_SUBMISSIONS: Assignment[] = [
-    { id: 101, subject: "Matematika", title: "Latihan Aljabar Linear", studentName: "Ahmad Siswa", deadline: "2026-01-20", status: "Sudah Dikumpulkan" },
-    { id: 102, subject: "Matematika", title: "Latihan Aljabar Linear", studentName: "Budi Santoso", deadline: "2026-01-20", status: "Dinilai", score: 90 },
-    { id: 103, subject: "Fisika", title: "Laporan Praktikum", studentName: "Siti Aminah", deadline: "2026-01-15", status: "Sudah Dikumpulkan" },
-]
-
 export default function AssignmentsPage() {
     const router = useRouter()
+    const { t, language } = useLanguage()
     const [role, setRole] = useState<string | null>(null)
     const [assignments, setAssignments] = useState<Assignment[]>([])
+
+    // Localized dummy data
+    const STUDENT_ASSIGNMENTS = React.useMemo<Assignment[]>(() => [
+        { id: 1, subject: t.teachers.math, title: language === 'id' ? "Latihan Aljabar Linear" : "Linear Algebra Practice", deadline: "2026-01-20", status: "Belum Dikerjakan" },
+        { id: 2, subject: t.teachers.indo, title: language === 'id' ? "Membuat Puisi" : "Write a Poem", deadline: "2026-01-18", status: "Sudah Dikumpulkan" },
+        { id: 3, subject: language === 'id' ? "Fisika" : "Physics", title: language === 'id' ? "Laporan Praktikum Hukum Newton" : "Newton's Law Lab Report", deadline: "2026-01-15", status: "Dinilai", score: 85 },
+    ], [t, language])
+
+    const TEACHER_SUBMISSIONS = React.useMemo<Assignment[]>(() => [
+        { id: 101, subject: t.teachers.math, title: language === 'id' ? "Latihan Aljabar Linear" : "Linear Algebra Practice", studentName: "Ahmad Siswa", deadline: "2026-01-20", status: "Sudah Dikumpulkan" },
+        { id: 102, subject: t.teachers.math, title: language === 'id' ? "Latihan Aljabar Linear" : "Linear Algebra Practice", studentName: "Budi Santoso", deadline: "2026-01-20", status: "Dinilai", score: 90 },
+        { id: 103, subject: language === 'id' ? "Fisika" : "Physics", title: language === 'id' ? "Laporan Praktikum" : "Lab Report", studentName: "Siti Aminah", deadline: "2026-01-15", status: "Sudah Dikumpulkan" },
+    ], [t, language])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
@@ -81,13 +83,13 @@ export default function AssignmentsPage() {
     }
 
     const handleConfirmUpload = () => {
-        setToast({ message: "Tugas berhasil diupload!", type: "success" })
+        setToast({ message: t.assignments.upload_success, type: "success" })
         setIsModalOpen(false)
     }
 
     const handleCreateAssignment = () => {
         if (!newAssignment.subject || !newAssignment.title || !newAssignment.deadline) {
-            setToast({ message: "Harap isi semua bidang!", type: "error" })
+            setToast({ message: t.assignments.fill_all, type: "error" })
             return
         }
 
@@ -103,10 +105,10 @@ export default function AssignmentsPage() {
         setAssignments([assignmentRecord, ...assignments])
         setIsCreateModalOpen(false)
         setNewAssignment({ subject: "", title: "", deadline: "" })
-        setToast({ message: "Tugas baru berhasil dibuat!", type: "success" })
+        setToast({ message: t.assignments.create_success, type: "success" })
     }
 
-    if (!role) return <div className="p-8 text-center text-gray-500">Loading assignments...</div>
+    if (!role) return <div className="p-8 text-center text-gray-500">{t.common.loading}</div>
 
     return (
         <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden font-sans text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -121,14 +123,14 @@ export default function AssignmentsPage() {
                     <div className="max-w-7xl mx-auto">
                         <div className="flex justify-between items-center mb-8">
                             <h1 className="text-3xl font-bold text-gray-800 dark:text-white tracking-tight">
-                                {role === "student" ? "Tugas & PR" : "Penilaian Tugas Siswa"}
+                                {role === "student" ? t.assignments.student_title : t.assignments.teacher_title}
                             </h1>
                             {role !== "student" && (
                                 <button
                                     onClick={() => setIsCreateModalOpen(true)}
                                     className="bg-blue-600 text-white px-6 py-2.5 rounded-xl shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5 font-medium"
                                 >
-                                    + Buat Tugas Baru
+                                    {t.assignments.create_button}
                                 </button>
                             )}
                         </div>
@@ -139,28 +141,28 @@ export default function AssignmentsPage() {
                                     <thead className="bg-gray-50 dark:bg-gray-700/50">
                                         <tr>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                                Mata Pelajaran
+                                                {t.assignments.subject}
                                             </th>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                                Judul Tugas
+                                                {t.assignments.title}
                                             </th>
                                             {role !== "student" && (
                                                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                                    Nama Siswa
+                                                    {t.assignments.student_name}
                                                 </th>
                                             )}
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                                Deadline
+                                                {t.assignments.deadline}
                                             </th>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                                Status
+                                                {t.assignments.status}
                                             </th>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                                {role === "student" ? "Nilai" : "Input Nilai"}
+                                                {role === "student" ? t.assignments.score : t.assignments.input_score}
                                             </th>
                                             {role === "student" && (
                                                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                                    Aksi
+                                                    {t.assignments.action}
                                                 </th>
                                             )}
                                         </tr>
@@ -183,7 +185,11 @@ export default function AssignmentsPage() {
                                                                 : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 ring-1 ring-red-500/20"
                                                             }`}
                                                     >
-                                                        {item.status}
+                                                        {item.status === "Dinilai"
+                                                            ? t.assignments.status_graded
+                                                            : item.status === "Sudah Dikumpulkan"
+                                                                ? t.assignments.status_submitted
+                                                                : t.assignments.status_pending}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
@@ -195,8 +201,8 @@ export default function AssignmentsPage() {
                                                             min="0"
                                                             max="100"
                                                             className="w-20 px-3 py-1.5 border rounded-lg text-black dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                                            value={item.score === 0 && item.status !== "Dinilai" ? "" : item.score}
-                                                            placeholder="0-100"
+                                                            value={(item.score === 0 && item.status !== "Dinilai") ? "" : (item.score ?? "")}
+                                                            placeholder={t.assignments.placeholder}
                                                             onChange={(e) => handleGradingChange(item.id, e.target.value)}
                                                             onWheel={(e) => (e.target as HTMLInputElement).blur()}
                                                         />
@@ -225,8 +231,8 @@ export default function AssignmentsPage() {
                                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-lg w-full shadow-2xl transform transition-all scale-100 border border-gray-100 dark:border-gray-700">
                                     <div className="flex justify-between items-start mb-6">
                                         <div>
-                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Buat Tugas Baru</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Isi detail tugas di bawah ini.</p>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t.assignments.modal_title}</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t.assignments.modal_subtitle}</p>
                                         </div>
                                         <button onClick={() => setIsCreateModalOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -235,27 +241,27 @@ export default function AssignmentsPage() {
 
                                     <div className="space-y-4 mb-8">
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Mata Pelajaran</label>
+                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">{t.assignments.subject}</label>
                                             <input
                                                 type="text"
                                                 className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                                placeholder="Contoh: Matematika"
+                                                placeholder={language === 'id' ? "Contoh: Matematika" : "Example: Mathematics"}
                                                 value={newAssignment.subject}
                                                 onChange={(e) => setNewAssignment({ ...newAssignment, subject: e.target.value })}
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Tugas</label>
+                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">{t.assignments.title}</label>
                                             <input
                                                 type="text"
                                                 className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                                placeholder="Contoh: Latihan Trigonometri"
+                                                placeholder={language === 'id' ? "Contoh: Latihan Trigonometri" : "Example: Trigonometry Practice"}
                                                 value={newAssignment.title}
                                                 onChange={(e) => setNewAssignment({ ...newAssignment, title: e.target.value })}
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Deadline</label>
+                                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">{t.assignments.deadline}</label>
                                             <input
                                                 type="date"
                                                 className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
@@ -270,13 +276,13 @@ export default function AssignmentsPage() {
                                             onClick={() => setIsCreateModalOpen(false)}
                                             className="px-5 py-2.5 rounded-xl text-gray-700 dark:text-gray-200 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                         >
-                                            Batal
+                                            {t.assignments.cancel}
                                         </button>
                                         <button
                                             onClick={handleCreateAssignment}
                                             className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5"
                                         >
-                                            Simpan Tugas
+                                            {t.assignments.save_button}
                                         </button>
                                     </div>
                                 </div>
@@ -289,7 +295,7 @@ export default function AssignmentsPage() {
                                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-lg w-full shadow-2xl transform transition-all scale-100 border border-gray-100 dark:border-gray-700">
                                     <div className="flex justify-between items-start mb-6">
                                         <div>
-                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Upload Tugas</h3>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t.assignments.upload_title}</h3>
                                             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{selectedAssignment?.title}</p>
                                         </div>
                                         <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
@@ -298,7 +304,7 @@ export default function AssignmentsPage() {
                                     </div>
 
                                     <div className="mb-8">
-                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Pilih File Tugas</label>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t.assignments.upload_file_label}</label>
                                         <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-gray-50 dark:bg-gray-900/50 cursor-pointer">
                                             <div className="mx-auto w-12 h-12 text-gray-400 mb-3">
                                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
@@ -317,13 +323,13 @@ export default function AssignmentsPage() {
                                             onClick={() => setIsModalOpen(false)}
                                             className="px-5 py-2.5 rounded-xl text-gray-700 dark:text-gray-200 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                         >
-                                            Batal
+                                            {t.assignments.cancel}
                                         </button>
                                         <button
                                             onClick={handleConfirmUpload}
                                             className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5"
                                         >
-                                            Upload Sekarang
+                                            {t.assignments.upload_now}
                                         </button>
                                     </div>
                                 </div>

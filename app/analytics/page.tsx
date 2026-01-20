@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
     Users,
     DollarSign,
@@ -56,13 +57,14 @@ const trendData = [
     { name: 'Week 4', Revenue: 2100, Sales: 1900 },
 ];
 
-const timeRanges = [
-    'Today', 'Yesterday', 'Last 7 Days', 'Last 30 Days',
-    'This Month', 'Last Month', 'This Year', 'Last Year', 'All Time'
-];
-
 export default function AnalyticsPage() {
-    const [selectedRange, setSelectedRange] = useState('Last 7 Days');
+    const { t, language } = useLanguage();
+    const timeRanges = [
+        t.analytics.ranges.today, t.analytics.ranges.yesterday, t.analytics.ranges.last_7_days,
+        t.analytics.ranges.last_30_days, t.analytics.ranges.this_month, t.analytics.ranges.last_month,
+        t.analytics.ranges.this_year, t.analytics.ranges.last_year, t.analytics.ranges.all_time
+    ];
+    const [selectedRange, setSelectedRange] = useState(timeRanges[2]);
     const [autoRefresh, setAutoRefresh] = useState(true);
     const [countdown, setCountdown] = useState(49);
     const [isLoading, setIsLoading] = useState(false);
@@ -99,17 +101,17 @@ export default function AnalyticsPage() {
                         <div className="bg-white dark:bg-gray-900 rounded-[2rem] p-8 shadow-sm border border-gray-100 dark:border-gray-800">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                                 <div>
-                                    <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Analytic Dashboard</h1>
-                                    <p className="text-gray-500 dark:text-gray-400 font-bold mt-1">Real Time Analytics</p>
+                                    <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">{t.analytics.title}</h1>
+                                    <p className="text-gray-500 dark:text-gray-400 font-bold mt-1">{t.analytics.subtitle}</p>
                                     <p className="text-sm font-black text-indigo-600 dark:text-indigo-400 mt-2">
-                                        Viewing data for: <span className="text-gray-900 dark:text-white uppercase">{selectedRange}</span>
+                                        {t.analytics.viewing_data} <span className="text-gray-900 dark:text-white uppercase">{selectedRange}</span>
                                     </p>
                                 </div>
                                 <Link
                                     href="/"
                                     className="flex items-center gap-2 text-sm font-black text-gray-400 hover:text-indigo-600 transition-colors"
                                 >
-                                    <ChevronLeft className="w-4 h-4" /> Kembali ke Home
+                                    <ChevronLeft className="w-4 h-4" /> {t.users_page.back_home}
                                 </Link>
                             </div>
 
@@ -123,8 +125,8 @@ export default function AnalyticsPage() {
                                         key={range}
                                         onClick={() => setSelectedRange(range)}
                                         className={`px-5 py-3 rounded-xl text-sm font-black transition-all ${selectedRange === range
-                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
-                                                : 'bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
+                                            : 'bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                                             }`}
                                     >
                                         {range}
@@ -135,7 +137,7 @@ export default function AnalyticsPage() {
                             {/* Refresh Controls */}
                             <div className="flex items-center gap-6 pt-6 border-t border-gray-100 dark:border-gray-800">
                                 <div className="flex items-center gap-3">
-                                    <span className="text-sm font-black text-gray-400 uppercase tracking-widest">Auto Refresh</span>
+                                    <span className="text-sm font-black text-gray-400 uppercase tracking-widest">{t.analytics.auto_refresh}</span>
                                     <button
                                         onClick={() => setAutoRefresh(!autoRefresh)}
                                         className={`w-14 h-8 rounded-full p-1 transition-colors duration-300 ${autoRefresh ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'}`}
@@ -154,7 +156,7 @@ export default function AnalyticsPage() {
                                     className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-xl text-sm font-black text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all uppercase tracking-widest active:scale-95 disabled:opacity-50"
                                 >
                                     <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                                    Refresh
+                                    {t.analytics.refresh}
                                 </button>
                             </div>
                         </div>
@@ -162,28 +164,28 @@ export default function AnalyticsPage() {
                         {/* Summary Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <StatCard
-                                title="Total Users"
+                                title={t.analytics.total_users}
                                 value="7407"
                                 growth="+5.2%"
                                 icon={<Users className="w-6 h-6 text-white" />}
                                 color="bg-blue-500"
                             />
                             <StatCard
-                                title="Total Revenue"
+                                title={t.analytics.total_revenue}
                                 value="$27407"
                                 growth="+3.8%"
                                 icon={<DollarSign className="w-6 h-6 text-white" />}
                                 color="bg-emerald-500"
                             />
                             <StatCard
-                                title="Total Orders"
+                                title={t.analytics.total_orders}
                                 value="2074"
                                 growth="+4.1%"
                                 icon={<ShoppingCart className="w-6 h-6 text-white" />}
                                 color="bg-amber-500"
                             />
                             < StatCard
-                                title="Growth Rate"
+                                title={t.analytics.growth_rate}
                                 value="14.1%"
                                 growth="+2.7%"
                                 icon={<TrendingUp className="w-6 h-6 text-white" />}
@@ -197,7 +199,7 @@ export default function AnalyticsPage() {
                             {/* Monthly Performance */}
                             <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col h-[500px]">
                                 <div className="flex justify-between items-center mb-10">
-                                    <h3 className="text-xl font-black text-gray-900 dark:text-white">Monthly Performance</h3>
+                                    <h3 className="text-xl font-black text-gray-900 dark:text-white">{t.analytics.monthly_performance}</h3>
                                     <button className="text-gray-400 hover:text-indigo-600 transition-colors">
                                         <Maximize2 className="w-5 h-5" />
                                     </button>
@@ -235,7 +237,7 @@ export default function AnalyticsPage() {
                             {/* Distribution by Category */}
                             <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col h-[500px]">
                                 <div className="flex justify-between items-center mb-10">
-                                    <h3 className="text-xl font-black text-gray-900 dark:text-white">Distribution by Category</h3>
+                                    <h3 className="text-xl font-black text-gray-900 dark:text-white">{t.analytics.distribution}</h3>
                                     <button className="text-gray-400 hover:text-indigo-600 transition-colors">
                                         <Maximize2 className="w-5 h-5" />
                                     </button>
@@ -272,7 +274,7 @@ export default function AnalyticsPage() {
                             {/* Weekly Trends */}
                             <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col h-[500px]">
                                 <div className="flex justify-between items-center mb-10">
-                                    <h3 className="text-xl font-black text-gray-900 dark:text-white">Weekly Trends</h3>
+                                    <h3 className="text-xl font-black text-gray-900 dark:text-white">{t.analytics.weekly_trends}</h3>
                                     <button className="text-gray-400 hover:text-indigo-600 transition-colors">
                                         <Maximize2 className="w-5 h-5" />
                                     </button>

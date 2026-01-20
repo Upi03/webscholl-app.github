@@ -4,8 +4,10 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Link from "next/link";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function ProfileDetailsPage() {
+    const { t } = useLanguage();
     const [userData, setUserData] = React.useState<{ username?: string; email?: string; role?: string } | null>(null);
 
     React.useEffect(() => {
@@ -47,22 +49,22 @@ export default function ProfileDetailsPage() {
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                 </svg>
-                                Kembali ke Profil
+                                {t.profile_details.back}
                             </Link>
-                            <h1 className="text-3xl font-black text-gray-900 dark:text-white">Detail Akademik</h1>
-                            <p className="text-gray-600 dark:text-gray-400 mt-2">Informasi mendalam mengenai profil {isStudent ? "siswa" : "guru"}</p>
+                            <h1 className="text-3xl font-black text-gray-900 dark:text-white">{t.profile_details.title}</h1>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2">{isStudent ? t.profile_details.subtitle_student : t.profile_details.subtitle_teacher}</p>
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             {/* Bio / About */}
                             <div className="lg:col-span-2 space-y-6">
                                 <div className="bg-white dark:bg-gray-900 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800">
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Biodata Singkat</h3>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{t.profile_details.bio_title}</h3>
                                     <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
                                         {isStudent ? studentBio : teacherBio}
                                     </p>
                                     <div className="mt-8">
-                                        <h4 className="text-sm font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">{isStudent ? "Mata Pelajaran Favorit" : "Keahlian Pendidik"}</h4>
+                                        <h4 className="text-sm font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">{isStudent ? t.profile_details.fav_subject : t.profile_details.expert}</h4>
                                         <div className="flex flex-wrap gap-2">
                                             {skills.map((skill) => (
                                                 <span key={skill} className="px-5 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl text-xs font-black border border-blue-100 dark:border-blue-800/50">
@@ -75,7 +77,7 @@ export default function ProfileDetailsPage() {
 
                                 <div className="bg-white dark:bg-gray-900 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800">
                                     <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 underline decoration-blue-500 decoration-4 underline-offset-8">
-                                        {isStudent ? "Jadwal Kelas Besok" : "Kelas Yang Diampu"}
+                                        {isStudent ? t.profile_details.schedule_student : t.profile_details.schedule_teacher}
                                     </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {(isStudent ? [
@@ -100,7 +102,7 @@ export default function ProfileDetailsPage() {
                             {/* Activity Feed */}
                             <div className="space-y-6">
                                 <div className="bg-white dark:bg-gray-900 p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 h-full">
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Log Aktivitas</h3>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t.profile_details.activity_log}</h3>
                                     <div className="space-y-8 relative">
                                         <div className="absolute top-0 bottom-0 left-[15px] w-1 bg-gray-50 dark:bg-gray-800 rounded-full"></div>
                                         {activities.map((activity, i) => (
@@ -117,7 +119,7 @@ export default function ProfileDetailsPage() {
                                         ))}
                                     </div>
                                     <button className="w-full mt-10 py-4 bg-gray-50 dark:bg-gray-800/50 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-sm">
-                                        Lihat Riwayat Lengkap
+                                        {t.profile_details.view_history}
                                     </button>
                                 </div>
                             </div>

@@ -6,11 +6,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useNavStore } from "../store/useNavStore";
 import PWAButton from "./PWAButton";
+import LanguageSwitcher from "./LanguageSwitcher";
 import Toast from "./Toast";
 import { STUDENTS_DATA, APP_PAGES } from "../../lib/dummyData";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 export default function Navbar() {
     const { isNavbarOpen, toggleNavbar, openSidebar } = useNavStore();
+    const { t, language } = useLanguage();
     const pathname = usePathname();
     const router = useRouter();
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -67,9 +70,9 @@ export default function Navbar() {
     };
 
     const [notifications] = useState([
-        { id: 1, title: "Rapat Guru", message: "Rapat bulanan besok jam 09:00", time: "1 jam yang lalu" },
-        { id: 2, title: "Jadwal Ujian", message: "Jadwal UAS telah dirilis", time: "2 jam yang lalu" },
-        { id: 3, title: "Absensi", message: "Rekap absensi bulan ini siap", time: "5 jam yang lalu" },
+        { id: 1, title: language === 'id' ? "Rapat Guru" : "Teacher Meeting", message: language === 'id' ? "Rapat bulanan besok jam 09:00" : "Monthly meeting tomorrow at 09:00", time: language === 'id' ? "1 jam yang lalu" : "1 hour ago" },
+        { id: 2, title: language === 'id' ? "Jadwal Ujian" : "Exam Schedule", message: language === 'id' ? "Jadwal UAS telah dirilis" : "Final exam schedule released", time: language === 'id' ? "2 jam yang lalu" : "2 hours ago" },
+        { id: 3, title: language === 'id' ? "Absensi" : "Attendance", message: language === 'id' ? "Rekap absensi bulan ini siap" : "Monthly attendance recap ready", time: language === 'id' ? "5 jam yang lalu" : "5 hours ago" },
     ]);
 
     const handleNotificationClick = () => {
@@ -77,7 +80,7 @@ export default function Navbar() {
     };
 
     const handleNewNotification = () => {
-        setToast({ message: "Notifikasi Baru: Pengumuman Libur Sekolah!", type: "info" });
+        setToast({ message: t.navbar.notification_simulation_toast, type: "info" });
         setIsNotificationOpen(false);
     };
 
@@ -112,7 +115,7 @@ export default function Navbar() {
                             id="global-search"
                             type="text"
                             className="block w-full pl-10 pr-12 py-2 border-2 border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 rounded-2xl text-sm outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all dark:text-white font-medium shadow-sm"
-                            placeholder="Cari fitur atau nama siswa... (K)"
+                            placeholder={t.navbar.search_placeholder}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={handleKeyDown}
@@ -144,7 +147,7 @@ export default function Navbar() {
                                         </div>
                                         <div>
                                             <p className="text-sm font-bold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{result.name}</p>
-                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{result.type === 'page' ? 'Navigasi' : 'Siswa'}</p>
+                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{result.type === 'page' ? t.navbar.navigation : t.navbar.student_label}</p>
                                         </div>
                                     </button>
                                 ))}
@@ -156,13 +159,13 @@ export default function Navbar() {
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center space-x-8">
                     <Link href="/" className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">
-                        <span>Home</span>
+                        <span>{t.common.home}</span>
                     </Link>
                     <Link href="/about" className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">
-                        <span>About</span>
+                        <span>{t.common.about}</span>
                     </Link>
                     <Link href="/contact" className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition">
-                        <span>Contact</span>
+                        <span>{t.common.contact}</span>
                     </Link>
 
                     {/* Theme Toggle */}
@@ -170,6 +173,9 @@ export default function Navbar() {
 
                     {/* PWA Install Button */}
                     <PWAButton />
+
+                    {/* Language Switcher */}
+                    <LanguageSwitcher />
 
                     {/* Notification Icon */}
                     <button
@@ -186,6 +192,7 @@ export default function Navbar() {
                 {/* Mobile Menu Icon - Toggle Navbar Menu */}
                 <div className="md:hidden flex items-center space-x-4">
                     <PWAButton />
+                    <LanguageSwitcher />
                     <ThemeToggle />
                     <div
                         className="cursor-pointer p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 rounded-md"
@@ -201,19 +208,19 @@ export default function Navbar() {
             {/* Mobile Menu Dropdown */}
             {isNavbarOpen && (
                 <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-800 shadow-lg py-4 px-6 space-y-4 animate-slide-down">
-                    <Link href="/" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Home</Link>
-                    <Link href="/about" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>About</Link>
-                    <Link href="/users" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Users</Link>
-                    <Link href="/analytics" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Analytics</Link>
-                    <Link href="/map" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Map</Link>
-                    <Link href="/image-compression" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Image Compression</Link>
-                    <Link href="/sprite" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Sprite</Link>
-                    <Link href="/storage" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Storage</Link>
-                    <Link href="/indexeddb" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>IndexedDB</Link>
-                    <Link href="/realtime-db" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>Realtime DB</Link>
-                    <Link href="/settings" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Settings</Link>
-                    <Link href="/profile" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Profile</Link>
-                    <Link href="/contact" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>Contact</Link>
+                    <Link href="/" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>{t.common.home}</Link>
+                    <Link href="/about" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>{t.common.about}</Link>
+                    <Link href="/users" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>{t.sidebar.users}</Link>
+                    <Link href="/analytics" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>{t.sidebar.analytics}</Link>
+                    <Link href="/map" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>{t.sidebar.map}</Link>
+                    <Link href="/image-compression" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>{t.sidebar.compression}</Link>
+                    <Link href="/sprite" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>{t.sidebar.sprite}</Link>
+                    <Link href="/storage" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>{t.sidebar.storage}</Link>
+                    <Link href="/indexeddb" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>{t.sidebar.indexed_db}</Link>
+                    <Link href="/realtime-db" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onClick={toggleNavbar}>{t.sidebar.realtime_db}</Link>
+                    <Link href="/settings" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>{t.common.settings}</Link>
+                    <Link href="/profile" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>{t.common.profile}</Link>
+                    <Link href="/contact" className="block text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400" onClick={toggleNavbar}>{t.common.contact}</Link>
                 </div>
             )}
 
@@ -221,8 +228,8 @@ export default function Navbar() {
             {isNotificationOpen && (
                 <div className="absolute top-16 right-4 sm:right-20 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden z-[100] animate-fade-in-up origin-top-right">
                     <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
-                        <h3 className="font-bold text-gray-900 dark:text-white">Notifikasi</h3>
-                        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">3 Baru</span>
+                        <h3 className="font-bold text-gray-900 dark:text-white">{t.navbar.notifications}</h3>
+                        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">3 {t.navbar.new_notifications}</span>
                     </div>
                     <div className="max-h-80 overflow-y-auto">
                         {notifications.map((notif) => (
@@ -240,7 +247,7 @@ export default function Navbar() {
                             onClick={handleNewNotification}
                             className="text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 uppercase tracking-wider"
                         >
-                            Simulasi Notifikasi Baru
+                            {t.navbar.simulation}
                         </button>
                     </div>
                 </div>

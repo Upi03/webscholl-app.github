@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { supabase } from '../../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Zap,
@@ -24,6 +25,7 @@ interface Todo {
 }
 
 export default function RealtimeDBPage() {
+    const { t } = useLanguage();
     const [todos, setTodos] = useState<Todo[]>([]);
     const [inputValue, setInputValue] = useState('');
     const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
@@ -143,11 +145,11 @@ export default function RealtimeDBPage() {
                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 px-2">
                             <span className="flex items-center gap-2">
                                 <RefreshCw className="w-3 h-3 animate-spin text-indigo-500" />
-                                Supabase Realtime Connected
+                                {t.realtime_page.connected}
                             </span>
                             <span className="flex items-center gap-2">
                                 <Zap className="w-3 h-3 text-amber-500 fill-amber-500" />
-                                Next.js SPA Engine Active
+                                {t.realtime_page.engine_active}
                             </span>
                         </div>
 
@@ -158,12 +160,12 @@ export default function RealtimeDBPage() {
                             className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden"
                         >
                             <div className="relative z-10">
-                                <h1 className="text-3xl font-black tracking-tight mb-2">Todo List with Supabase dan Send Notifikasi</h1>
+                                <h1 className="text-3xl font-black tracking-tight mb-2">{t.realtime_page.title}</h1>
                                 <p className="text-indigo-100 font-bold opacity-80 flex items-center gap-2">
                                     {isNotificationEnabled ? (
-                                        <><Bell className="w-4 h-4 text-green-300" /> Notifikasi diizinkan</>
+                                        <><Bell className="w-4 h-4 text-green-300" /> {t.realtime_page.notif_allowed}</>
                                     ) : (
-                                        <button onClick={requestPermission} className="underline hover:text-white">Klik untuk izinkan notifikasi</button>
+                                        <button onClick={requestPermission} className="underline hover:text-white">{t.realtime_page.notif_request}</button>
                                     )}
                                 </p>
                             </div>
@@ -177,13 +179,13 @@ export default function RealtimeDBPage() {
                             transition={{ delay: 0.1 }}
                             className="bg-white dark:bg-gray-900 p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-800"
                         >
-                            <h2 className="text-lg font-black text-gray-900 dark:text-white mb-6 uppercase tracking-widest">Tambah Todo</h2>
+                            <h2 className="text-lg font-black text-gray-900 dark:text-white mb-6 uppercase tracking-widest">{t.realtime_page.add_todo}</h2>
                             <form onSubmit={addTodo} className="flex flex-col sm:flex-row gap-3">
                                 <input
                                     type="text"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
-                                    placeholder="Apa yang ingin anda lakukan..."
+                                    placeholder={t.realtime_page.placeholder}
                                     className="flex-1 px-6 py-4 bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-indigo-500 rounded-2xl text-gray-900 dark:text-white outline-none transition-all font-bold shadow-inner"
                                 />
                                 <button
@@ -191,7 +193,7 @@ export default function RealtimeDBPage() {
                                     className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black shadow-xl shadow-indigo-500/20 active:scale-95 transition-all text-sm uppercase tracking-widest flex items-center justify-center gap-2"
                                 >
                                     <Send className="w-4 h-4" />
-                                    Tambah
+                                    {t.realtime_page.add_btn}
                                 </button>
                             </form>
                         </motion.div>
@@ -205,7 +207,7 @@ export default function RealtimeDBPage() {
                         >
                             <div className="flex justify-between items-center mb-8">
                                 <h2 className="text-lg font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center gap-3">
-                                    Daftar Todo
+                                    {t.realtime_page.list_title}
                                     <span className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full text-sm">
                                         ({todos.length})
                                     </span>
@@ -215,7 +217,7 @@ export default function RealtimeDBPage() {
                                         onClick={clearAll}
                                         className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-red-500/20"
                                     >
-                                        Hapus Semua
+                                        {t.realtime_page.clear_all}
                                     </button>
                                 )}
                             </div>
@@ -251,7 +253,7 @@ export default function RealtimeDBPage() {
                                                     onClick={() => deleteTodo(todo.id)}
                                                     className="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold opacity-0 group-hover:opacity-100 transition-all hover:bg-red-200 dark:hover:bg-red-900/40"
                                                 >
-                                                    Hapus
+                                                    {t.realtime_page.delete}
                                                 </button>
                                             </motion.div>
                                         ))
@@ -264,7 +266,7 @@ export default function RealtimeDBPage() {
                                             <div className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-full mb-4">
                                                 <X className="w-8 h-8 opacity-20" />
                                             </div>
-                                            <p className="font-bold uppercase tracking-widest text-[10px]">Tidak ada todo yang tersedia</p>
+                                            <p className="font-bold uppercase tracking-widest text-[10px]">{t.realtime_page.no_todos}</p>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>

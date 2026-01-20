@@ -4,8 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function LoginPage() {
+    const { t } = useLanguage();
     const router = useRouter();
 
     //state Input
@@ -26,25 +28,25 @@ export default function LoginPage() {
 
         //Validasi Required (wajib Disis)
         if (!identifier || !password) {
-            setError("Email/Username dan Password harus diisi");
+            setError(t.auth_page.error_required);
             return;
         }
 
         // 2. Validasi Format (Minimal 3 karakter untuk username/email)
         if (identifier.length < 3) {
-            setError("Email atau Username tidak valid");
+            setError(t.auth_page.error_invalid_user);
             return;
         }
 
         //3. Validasi Panjang Password
         if (password.length < 6) {
-            setError("Password minimal 6 karakter");
+            setError(t.auth_page.error_password_length);
             return;
         }
 
         //4. Validasi Recaptcha
         if (!recaptchaValue) {
-            setError("Harap centang reCAPTCHA");
+            setError(t.auth_page.error_recaptcha);
             return;
         }
 
@@ -58,7 +60,7 @@ export default function LoginPage() {
             ((identifier === defaultAdmin.email || identifier === defaultAdmin.username) && password === defaultAdmin.password);
 
         if (!isValidUser) {
-            setError("Email/Username atau Password salah!");
+            setError(t.auth_page.error_login_failed);
             return;
         }
 
@@ -74,7 +76,7 @@ export default function LoginPage() {
 
         //Jika lolos
         setError("");
-        setSuccess("Login Berhasil! Selamat Datang.");
+        setSuccess(t.auth_page.success_login);
 
         // Simpan sesi ke localStorage
         const isDefaultAdmin = identifier === defaultAdmin.email || identifier === defaultAdmin.username;
@@ -101,7 +103,7 @@ export default function LoginPage() {
                         </svg>
                     </div>
                     <div>
-                        <h4 className="font-bold text-gray-800">Sukses!</h4>
+                        <h4 className="font-bold text-gray-800">{t.common.success || "Sukses!"}</h4>
                         <p className="text-sm text-gray-600">{success}</p>
                     </div>
                 </div>
@@ -109,8 +111,8 @@ export default function LoginPage() {
 
             <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 space-y-6 relative z-10 border border-gray-100 dark:border-gray-800">
                 <div className="text-center">
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Masuk Akun</h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Silahkan login untuk mengakses ke Dashboard</p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.auth_page.login_title}</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t.auth_page.login_subtitle}</p>
                 </div>
                 {error && (
                     <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center border border-red-200">
@@ -120,30 +122,30 @@ export default function LoginPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Masuk Sebagai</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.auth_page.login_as}</label>
                         <select
                             value={role}
                             onChange={(e) => setRole(e.target.value as "student" | "admin")}
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
                         >
-                            <option value="student">Siswa</option>
-                            <option value="admin">Guru / Admin</option>
+                            <option value="student">{t.auth_page.student}</option>
+                            <option value="admin">{t.auth_page.admin_teacher}</option>
                         </select>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Email atau Username</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.auth_page.email_user}</label>
                         <input
                             type="text"
                             value={identifier}
                             onChange={(e) => setIdentifier(e.target.value)}
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
-                            placeholder="Email atau Username"
+                            placeholder={t.auth_page.email_user}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.auth_page.password}</label>
                         <input
                             type="password"
                             value={password}
@@ -163,13 +165,13 @@ export default function LoginPage() {
                         type="submit"
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-200 transform hover:scale-[1.02]"
                     >
-                        Masuk
+                        {t.auth_page.login_button}
                     </button>
 
                     <div className="text-center text-sm text-gray-600 dark:text-gray-400">
-                        Belum punya akun?{" "}
+                        {t.auth_page.no_account}{" "}
                         <Link href="/register" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium hover:underline">
-                            Daftar sekarang
+                            {t.auth_page.register_now}
                         </Link>
                     </div>
                 </form>

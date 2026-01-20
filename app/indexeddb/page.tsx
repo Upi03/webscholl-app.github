@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
     Database,
     Plus,
@@ -25,6 +26,7 @@ interface Todo {
 }
 
 export default function IndexedDBPage() {
+    const { t } = useLanguage();
     const [todos, setTodos] = useState<Todo[]>([]);
     const [inputValue, setInputValue] = useState('');
     const [db, setDb] = useState<IDBDatabase | null>(null);
@@ -35,7 +37,7 @@ export default function IndexedDBPage() {
         const request = indexedDB.open(DB_NAME, DB_VERSION);
 
         request.onerror = () => {
-            setError("Gagal membuka database.");
+            setError(t.indexeddb_page.error_open);
         };
 
         request.onupgradeneeded = (event: any) => {
@@ -118,8 +120,8 @@ export default function IndexedDBPage() {
                         {/* Hero Header */}
                         <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
                             <div className="relative z-10">
-                                <h1 className="text-3xl font-black tracking-tight mb-2">Todo List with IndexedDB</h1>
-                                <p className="text-indigo-100 font-bold opacity-80">Database Browser untuk data kompleks</p>
+                                <h1 className="text-3xl font-black tracking-tight mb-2">{t.indexeddb_page.title}</h1>
+                                <p className="text-indigo-100 font-bold opacity-80">{t.indexeddb_page.subtitle}</p>
                             </div>
                             <Database className="absolute bottom-[-20px] right-[-20px] w-48 h-48 text-white opacity-10 rotate-12" />
                         </div>
@@ -134,20 +136,20 @@ export default function IndexedDBPage() {
 
                         {/* Add Todo Form */}
                         <div className="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
-                            <h2 className="text-lg font-black text-gray-900 dark:text-white mb-6 uppercase tracking-widest">Tambah Todo</h2>
+                            <h2 className="text-lg font-black text-gray-900 dark:text-white mb-6 uppercase tracking-widest">{t.indexeddb_page.add_todo}</h2>
                             <form onSubmit={addTodo} className="flex flex-col sm:flex-row gap-3">
                                 <input
                                     type="text"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
-                                    placeholder="Mancing mungking"
+                                    placeholder={t.indexeddb_page.placeholder}
                                     className="flex-1 px-6 py-4 bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-indigo-500 rounded-2xl text-gray-900 dark:text-white outline-none transition-all font-bold shadow-inner"
                                 />
                                 <button
                                     type="submit"
                                     className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-2xl font-black shadow-xl shadow-indigo-500/20 active:scale-95 transition-all text-sm uppercase tracking-widest"
                                 >
-                                    Tambah
+                                    {t.indexeddb_page.add_btn}
                                 </button>
                             </form>
                         </div>
@@ -156,7 +158,7 @@ export default function IndexedDBPage() {
                         <div className="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
                             <div className="flex justify-between items-center mb-8">
                                 <h2 className="text-lg font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center gap-3">
-                                    Daftar Todo
+                                    {t.indexeddb_page.list_title}
                                     <span className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full text-sm">
                                         ({todos.length})
                                     </span>
@@ -167,7 +169,7 @@ export default function IndexedDBPage() {
                                         className="text-xs font-black text-red-500 hover:text-red-600 uppercase tracking-widest flex items-center gap-1 transition-colors"
                                     >
                                         <Trash2 className="w-3.5 h-3.5" />
-                                        Hapus Semua
+                                        {t.indexeddb_page.clear_all}
                                     </button>
                                 )}
                             </div>
@@ -194,7 +196,7 @@ export default function IndexedDBPage() {
                                 ) : (
                                     <div className="flex flex-col items-center justify-center py-16 text-gray-400 dark:text-gray-600">
                                         <ListTodo className="w-16 h-16 mb-4 opacity-20" />
-                                        <p className="font-bold uppercase tracking-widest text-xs">Belum ada daftar kegiatan</p>
+                                        <p className="font-bold uppercase tracking-widest text-xs">{t.indexeddb_page.no_todos}</p>
                                     </div>
                                 )}
                             </div>

@@ -6,19 +6,25 @@ import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { MapPin, Navigation, ChevronLeft, Loader2 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Dynamically import MapComponent to avoid SSR errors with Leaflet
 const MapComponent = dynamic(() => import('../components/MapComponent'), {
     ssr: false,
-    loading: () => (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800/50 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700">
-            <Loader2 className="w-10 h-10 text-indigo-600 animate-spin mb-4" />
-            <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Memuat Peta...</p>
-        </div>
-    )
+    loading: () => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const { t } = useLanguage();
+        return (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800/50 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+                <Loader2 className="w-10 h-10 text-indigo-600 animate-spin mb-4" />
+                <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">{t.map_page.loading}</p>
+            </div>
+        );
+    }
 });
 
 export default function MapPage() {
+    const { t } = useLanguage();
     const [position, setPosition] = useState<[number, number]>([-7.9839, 112.6214]); // Default to Malang
     const [isLocating, setIsLocating] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -28,7 +34,7 @@ export default function MapPage() {
         setError(null);
 
         if (!navigator.geolocation) {
-            setError("Geolocation tidak didukung oleh browser Anda.");
+            setError(t.map_page.error_unsupported);
             setIsLocating(false);
             return;
         }
@@ -39,7 +45,7 @@ export default function MapPage() {
                 setIsLocating(false);
             },
             (err) => {
-                setError("Gagal mendapatkan lokasi: " + err.message);
+                setError(t.map_page.error_failed + err.message);
                 setIsLocating(false);
             },
             { enableHighAccuracy: true }
@@ -62,14 +68,14 @@ export default function MapPage() {
                             {/* Header Section */}
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
                                 <div>
-                                    <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Peta Sederhana</h1>
-                                    <p className="text-gray-500 dark:text-gray-400 font-bold mt-1 uppercase tracking-widest text-xs">Interactive Geolocation Map</p>
+                                    <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">{t.map_page.title}</h1>
+                                    <p className="text-gray-500 dark:text-gray-400 font-bold mt-1 uppercase tracking-widest text-xs">{t.map_page.subtitle}</p>
                                 </div>
                                 <Link
                                     href="/"
                                     className="flex items-center gap-2 text-sm font-black text-gray-400 hover:text-indigo-600 transition-colors"
                                 >
-                                    <ChevronLeft className="w-4 h-4" /> Kembali ke Home
+                                    <ChevronLeft className="w-4 h-4" /> {t.map_page.back_home}
                                 </Link>
                             </div>
 
@@ -82,7 +88,7 @@ export default function MapPage() {
                                         className="w-full md:w-auto px-10 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                                     >
                                         {isLocating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Navigation className="w-5 h-5" />}
-                                        Dapatkan Lokasi Saya
+                                        {t.map_page.get_location}
                                     </button>
 
                                     <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
@@ -123,7 +129,7 @@ export default function MapPage() {
                             <div className="mt-8 flex items-center justify-between text-gray-400 dark:text-gray-500">
                                 <p className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
                                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                                    Map Engine Active
+                                    {t.map_page.engine_active}
                                 </p>
                                 <p className="text-xs font-bold uppercase tracking-widest">Leaflet | © OpenStreetMap</p>
                             </div>
