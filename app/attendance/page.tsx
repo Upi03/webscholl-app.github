@@ -11,6 +11,8 @@ export default function AttendancePage() {
     const [isCheckedIn, setIsCheckedIn] = useState(false);
     const [checkInTime, setCheckInTime] = useState<string | null>(null);
 
+    const [currentTime, setCurrentTime] = useState(new Date());
+
     React.useEffect(() => {
         const storedUser = localStorage.getItem("currentUser");
         if (storedUser) {
@@ -23,6 +25,13 @@ export default function AttendancePage() {
             setIsCheckedIn(true);
             setCheckInTime(localStorage.getItem("lastCheckInTime"));
         }
+
+        // Live Clock Interval
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
     }, []);
 
     const handleCheckIn = () => {
@@ -55,10 +64,10 @@ export default function AttendancePage() {
 
                                     <div className="mb-8">
                                         <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-tr from-blue-600 to-indigo-600 mb-2">
-                                            {checkInTime || new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                                            {checkInTime || currentTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                                         </div>
                                         <p className="text-sm font-medium text-gray-400 uppercase tracking-widest">
-                                            {new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                            {currentTime.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                                         </p>
                                     </div>
 
