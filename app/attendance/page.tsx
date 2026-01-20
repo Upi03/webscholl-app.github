@@ -45,6 +45,17 @@ export default function AttendancePage() {
         const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
         const dateString = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
+        // Logic Status Absensi
+        // 06:00 - 07:00 -> Hadir Tepat Waktu
+        // > 07:00 -> Hadir Terlambat
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+
+        let status = "Hadir Terlambat";
+        if (hour === 6 || (hour === 7 && minute === 0)) {
+            status = "Hadir Tepat Waktu";
+        }
+
         setIsCheckedIn(true);
         setCheckInTime(timeString);
         localStorage.setItem("lastCheckInDate", now.toDateString());
@@ -54,7 +65,7 @@ export default function AttendancePage() {
         setAttendanceHistory(prev => [{
             id: Date.now(),
             date: dateString,
-            status: "Hadir Tepat Waktu",
+            status: status,
             time: timeString
         }, ...prev]);
     };

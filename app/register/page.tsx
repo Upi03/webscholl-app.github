@@ -45,8 +45,8 @@ export default function RegisterPage() {
         }
 
         //3 Validasi panjang password
-        if (password.length < 6) {
-            setError(t.auth_page.error_password_length);
+        if (password.length < 8) {
+            setError(t.auth_page.error_password_length || "Password minimum 8 karakter");
             return;
         }
 
@@ -137,9 +137,12 @@ export default function RegisterPage() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            minLength={8}
+                            maxLength={20}
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
                             placeholder="••••••••"
                         />
+                        <p className="text-xs text-gray-500 mt-1">Min 8, Max 20 characters</p>
                     </div>
 
                     <div>
@@ -148,6 +151,8 @@ export default function RegisterPage() {
                             type="password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            minLength={8}
+                            maxLength={20}
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
                             placeholder="••••••••"
                         />
