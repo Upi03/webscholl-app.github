@@ -80,7 +80,7 @@ export default function SchedulePage() {
 
             <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
-                <main className="flex-1 overflow-y-auto p-4 md:p-8">
+                <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900 transition-colors duration-300">
                     <div className="max-w-6xl mx-auto">
                         <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
@@ -93,8 +93,8 @@ export default function SchedulePage() {
                                         key={day}
                                         onClick={() => setActiveDay(day)}
                                         className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeDay === day
-                                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none"
-                                                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                                            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none"
+                                            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                                             }`}
                                     >
                                         {day.substring(0, 3)}

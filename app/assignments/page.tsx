@@ -111,16 +111,16 @@ export default function AssignmentsPage() {
     if (!role) return <div className="p-8 text-center text-gray-500">{t.common.loading}</div>
 
     return (
-        <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden font-sans text-gray-900 dark:text-gray-100 transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
             {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
-            <Sidebar />
+            <Navbar />
 
-            <div className="flex-1 flex flex-col overflow-hidden relative">
-                <Navbar />
+            <div className="flex flex-1 overflow-hidden">
+                <Sidebar />
 
-                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 p-4 sm:p-8">
-                    <div className="max-w-7xl mx-auto">
+                <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900 transition-colors duration-300">
+                    <div className="max-w-6xl mx-auto">
                         <div className="flex justify-between items-center mb-8">
                             <h1 className="text-3xl font-bold text-gray-800 dark:text-white tracking-tight">
                                 {role === "student" ? t.assignments.student_title : t.assignments.teacher_title}

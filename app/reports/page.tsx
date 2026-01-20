@@ -71,8 +71,8 @@ export default function ReportsPage() {
 
             <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
-                <main className="flex-1 overflow-y-auto p-4 md:p-8">
-                    <div className="max-w-4xl mx-auto">
+                <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900 transition-colors duration-300">
+                    <div className="max-w-6xl mx-auto">
                         <div className="flex justify-between items-center mb-8">
                             <div>
                                 <h1 className="text-3xl font-black text-gray-900 dark:text-white">E-Report Card</h1>
