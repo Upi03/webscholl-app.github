@@ -63,8 +63,8 @@ export default function AttendancePage() {
                                     </p>
 
                                     <div className="mb-8">
-                                        <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-tr from-blue-600 to-indigo-600 mb-2">
-                                            {checkInTime || currentTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                                        <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-tr from-blue-600 to-indigo-600 mb-2 tabular-nums">
+                                            {checkInTime || currentTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':')}
                                         </div>
                                         <p className="text-sm font-medium text-gray-400 uppercase tracking-widest">
                                             {currentTime.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
