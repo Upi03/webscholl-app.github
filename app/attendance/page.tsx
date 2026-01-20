@@ -13,6 +13,12 @@ export default function AttendancePage() {
 
     const [currentTime, setCurrentTime] = useState(new Date());
 
+    const [attendanceHistory, setAttendanceHistory] = useState([
+        { id: 1, date: "Senin, 19 Januari 2026", status: "Hadir Tepat Waktu", time: "07:00" },
+        { id: 2, date: "Senin, 18 Januari 2026", status: "Hadir Tepat Waktu", time: "07:00" },
+        { id: 3, date: "Senin, 17 Januari 2026", status: "Hadir Tepat Waktu", time: "07:00" }
+    ]);
+
     React.useEffect(() => {
         const storedUser = localStorage.getItem("currentUser");
         if (storedUser) {
@@ -37,10 +43,20 @@ export default function AttendancePage() {
     const handleCheckIn = () => {
         const now = new Date();
         const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        const dateString = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
         setIsCheckedIn(true);
         setCheckInTime(timeString);
         localStorage.setItem("lastCheckInDate", now.toDateString());
         localStorage.setItem("lastCheckInTime", timeString);
+
+        // Add to history
+        setAttendanceHistory(prev => [{
+            id: Date.now(),
+            date: dateString,
+            status: "Hadir Tepat Waktu",
+            time: timeString
+        }, ...prev]);
     };
 
     return (
@@ -94,8 +110,8 @@ export default function AttendancePage() {
                                 <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
                                     <h3 className="font-bold text-gray-900 dark:text-white mb-4">Riwayat Absensi</h3>
                                     <div className="space-y-3">
-                                        {[1, 2, 3].map((i) => (
-                                            <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                        {attendanceHistory.map((item) => (
+                                            <div key={item.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                                 <div className="flex items-center space-x-3">
                                                     <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,11 +119,11 @@ export default function AttendancePage() {
                                                         </svg>
                                                     </div>
                                                     <div>
-                                                        <p className="text-sm font-bold text-gray-900 dark:text-white">Senin, {20 - i} Januari 2026</p>
-                                                        <p className="text-xs text-gray-500 dark:text-gray-400">Hadir Tepat Waktu</p>
+                                                        <p className="text-sm font-bold text-gray-900 dark:text-white">{item.date}</p>
+                                                        <p className="text-xs text-gray-500 dark:text-gray-400">{item.status}</p>
                                                     </div>
                                                 </div>
-                                                <span className="text-sm font-mono font-medium text-gray-600 dark:text-gray-300">07:00</span>
+                                                <span className="text-sm font-mono font-medium text-gray-600 dark:text-gray-300">{item.time}</span>
                                             </div>
                                         ))}
                                     </div>
