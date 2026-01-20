@@ -31,7 +31,7 @@ export default function RegisterPage() {
         if (!username || !username.trim()) {
             setError(t.auth_page.error_all_fields);
             return;
-        }
+        } 
         if (!email || !password || !confirmPassword) {
             setError(t.auth_page.error_all_fields);
             return;

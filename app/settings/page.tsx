@@ -1,23 +1,64 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { useLanguage } from "../contexts/LanguageContext";
+import Toast from "../components/Toast";
+import ImageCropper from "../components/ImageCropper";
 
 export default function SettingsPage() {
     const { t } = useLanguage();
     const [activeTab, setActiveTab] = useState("general");
-    const [userData, setUserData] = useState<{ username?: string; email?: string } | null>(null);
+    const [userData, setUserData] = useState<{ username?: string; email?: string; photo?: string } | null>(null);
+    const [mounted, setMounted] = useState(false);
+    const [toast, setToast] = useState<{ message: string; type: "success" | "error" | "info" } | null>(null);
+    const [croppingImage, setCroppingImage] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    useState(() => {
+    useEffect(() => {
+        setMounted(true);
         if (typeof window !== "undefined") {
             const storedUser = localStorage.getItem("currentUser");
             if (storedUser) {
                 setUserData(JSON.parse(storedUser));
             }
         }
-    });
+    }, []);
+
+    const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setCroppingImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleCropComplete = (croppedImage: string) => {
+        const updatedUser = { ...userData, photo: croppedImage };
+        setUserData(updatedUser);
+        localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+        window.dispatchEvent(new Event("storage"));
+        setToast({ message: "Profile photo updated!", type: "success" });
+        setCroppingImage(null);
+    };
+
+    const handleSave = () => {
+        if (userData) {
+            localStorage.setItem("currentUser", JSON.stringify(userData));
+            window.dispatchEvent(new Event("storage"));
+            setToast({ message: "Settings saved successfully!", type: "success" });
+        }
+    };
+
+    if (!mounted) return null;
 
     const tabs = [
         {
@@ -54,6 +95,14 @@ export default function SettingsPage() {
     return (
         <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
             <Navbar />
+            {croppingImage && (
+                <ImageCropper
+                    imageSrc={croppingImage}
+                    onCropComplete={handleCropComplete}
+                    onCancel={() => setCroppingImage(null)}
+                />
+            )}
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
             <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
                 <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900/50">
@@ -67,14 +116,16 @@ export default function SettingsPage() {
                                 <button className="px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-semibold shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
                                     {t.settings_page.cancel}
                                 </button>
-                                <button className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 transition-all active:scale-95">
+                                <button
+                                    onClick={handleSave}
+                                    className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 transition-all active:scale-95"
+                                >
                                     {t.settings_page.save}
                                 </button>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                            {/* Navigation Sidebar */}
                             <div className="lg:col-span-3 space-y-2">
                                 {tabs.map((tab) => (
                                     <button
@@ -93,7 +144,6 @@ export default function SettingsPage() {
                                 ))}
                             </div>
 
-                            {/* Content Area */}
                             <div className="lg:col-span-9">
                                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 md:p-8">
                                     {activeTab === "general" && (
@@ -105,7 +155,8 @@ export default function SettingsPage() {
                                                         <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.settings_page.general.name}</label>
                                                         <input
                                                             type="text"
-                                                            defaultValue={userData?.username || "Ahmad Yusfie"}
+                                                            value={userData?.username || ""}
+                                                            onChange={(e) => setUserData(prev => prev ? { ...prev, username: e.target.value } : { username: e.target.value })}
                                                             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
                                                         />
                                                     </div>
@@ -113,7 +164,8 @@ export default function SettingsPage() {
                                                         <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.settings_page.general.email}</label>
                                                         <input
                                                             type="email"
-                                                            defaultValue={userData?.email || "yusfie@example.com"}
+                                                            value={userData?.email || ""}
+                                                            onChange={(e) => setUserData(prev => prev ? { ...prev, email: e.target.value } : { email: e.target.value })}
                                                             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
                                                         />
                                                     </div>
@@ -131,11 +183,17 @@ export default function SettingsPage() {
                                             <div className="pt-8 border-t border-gray-100 dark:border-gray-700">
                                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t.settings_page.general.photo}</h3>
                                                 <div className="flex items-center gap-6">
-                                                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-indigo-100 dark:shadow-none">
-                                                        {userData?.username?.substring(0, 2).toUpperCase() || "US"}
+                                                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-indigo-100 dark:shadow-none overflow-hidden relative">
+                                                        {userData?.photo ? (
+                                                            // eslint-disable-next-line @next/next/no-img-element
+                                                            <img src={userData.photo} alt="Profile" className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            userData?.username?.substring(0, 2).toUpperCase() || "US"
+                                                        )}
                                                     </div>
                                                     <div className="flex flex-col gap-2">
-                                                        <button className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm font-bold hover:bg-indigo-100 transition-colors">
+                                                        <input type="file" ref={fileInputRef} onChange={handlePhotoUpload} className="hidden" accept="image/*" />
+                                                        <button onClick={triggerFileInput} className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm font-bold hover:bg-indigo-100 transition-colors">
                                                             {t.settings_page.general.upload}
                                                         </button>
                                                         <p className="text-xs text-gray-500 dark:text-gray-400">{t.settings_page.general.photo_hint}</p>
@@ -147,35 +205,32 @@ export default function SettingsPage() {
 
                                     {activeTab === "security" && (
                                         <div className="space-y-8 animate-fade-in">
-                                            <div>
-                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t.settings_page.security.title}</h3>
-                                                <div className="space-y-6">
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                        <div className="space-y-1.5">
-                                                            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.settings_page.security.current_password}</label>
-                                                            <input type="password" placeholder="••••••••" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" />
-                                                        </div>
-                                                        <div></div> {/* Spacer */}
-                                                        <div className="space-y-1.5">
-                                                            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.settings_page.security.new_password}</label>
-                                                            <input type="password" placeholder="••••••••" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" />
-                                                        </div>
-                                                        <div className="space-y-1.5">
-                                                            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.settings_page.security.confirm_password}</label>
-                                                            <input type="password" placeholder="••••••••" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" />
-                                                        </div>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t.settings_page.security.title}</h3>
+                                            <div className="space-y-6">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <div className="space-y-1.5">
+                                                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.settings_page.security.current_password}</label>
+                                                        <input type="password" placeholder="••••••••" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" />
                                                     </div>
-
-                                                    <div className="pt-6 border-t border-gray-100 dark:border-gray-700">
-                                                        <div className="flex items-center justify-between p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20">
-                                                            <div>
-                                                                <h4 className="font-bold text-red-800 dark:text-red-400">{t.settings_page.security.two_factor}</h4>
-                                                                <p className="text-sm text-red-600 dark:text-red-400/80">{t.settings_page.security.two_factor_desc}</p>
-                                                            </div>
-                                                            <button className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-all">
-                                                                {t.settings_page.security.enable}
-                                                            </button>
+                                                    <div></div>
+                                                    <div className="space-y-1.5">
+                                                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.settings_page.security.new_password}</label>
+                                                        <input type="password" placeholder="••••••••" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" />
+                                                    </div>
+                                                    <div className="space-y-1.5">
+                                                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.settings_page.security.confirm_password}</label>
+                                                        <input type="password" placeholder="••••••••" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" />
+                                                    </div>
+                                                </div>
+                                                <div className="pt-6 border-t border-gray-100 dark:border-gray-700">
+                                                    <div className="flex items-center justify-between p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20">
+                                                        <div>
+                                                            <h4 className="font-bold text-red-800 dark:text-red-400">{t.settings_page.security.two_factor}</h4>
+                                                            <p className="text-sm text-red-600 dark:text-red-400/80">{t.settings_page.security.two_factor_desc}</p>
                                                         </div>
+                                                        <button className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-all">
+                                                            {t.settings_page.security.enable}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -231,7 +286,6 @@ export default function SettingsPage() {
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div className="pt-6 border-t border-gray-100 dark:border-gray-700">
                                                 <h4 className="font-bold text-gray-900 dark:text-white mb-4">Payment Methods</h4>
                                                 <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">

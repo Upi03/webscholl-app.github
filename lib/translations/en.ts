@@ -38,6 +38,9 @@ export const en = {
         media: "Media Gallery",
         attendance: "Attendance",
         assignments: "Assignments",
+        schedule: "Schedule",
+        reports: "Reports",
+        billing: "Billing",
         compression: "Compression",
         sprite: "Sprite",
         realtime_db: "Realtime DB",
@@ -61,22 +64,24 @@ export const en = {
         active_assignments: "Active Assignments",
         attendance_rate: "Attendance Rate",
         upcoming_events: "Upcoming Events",
-        about_title: "About This School Web",
-        about_desc: "This website is a modern school management system designed to facilitate academic administration. Built with the latest technology to ensure speed, security, and ease of use.",
-        features_title: "Main Features",
-        tech_title: "Technology",
+        about_title: "About Our School",
+        about_desc: "Our school is an educational institution dedicated to producing superior, characterful generations ready to face future challenges with an innovative curriculum and a supportive learning environment.",
+        features_title: "Excellence Programs",
+        tech_title: "Vision & Mission",
         features_list: [
-            "Student & Teacher Data Management",
-            "Academic Information System",
-            "School News & Announcements",
-            "School Activity Gallery"
+            "Character-Based Curriculum",
+            "Diverse Extracurricular Programs",
+            "Modern Learning Facilities",
+            "Digital Learning Community"
         ],
         tech_list: [
-            "Next.js & React Framework",
-            "Tailwind CSS Styling",
-            "PWA Ready (Mobile Support)",
-            "Realtime Database"
-        ]
+            "Producing Achieving Graduates",
+            "Building Integrity & Ethics",
+            "Encouraging Tech Innovation",
+            "Fostering Global Collaboration"
+        ],
+        chart_attendance: "Weekly Attendance Statistics",
+        chart_distribution: "Student Distribution"
     },
     assignments: {
         student_title: "Assignments & HW",

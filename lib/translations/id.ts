@@ -38,6 +38,9 @@ export const id = {
         media: "Galeri Media",
         attendance: "Absensi",
         assignments: "Tugas & PR",
+        schedule: "Jadwal",
+        reports: "Raport",
+        billing: "Tagihan",
         compression: "Kompresi",
         sprite: "Sprite",
         realtime_db: "Realtime DB",
@@ -61,22 +64,24 @@ export const id = {
         active_assignments: "Tugas Aktif",
         attendance_rate: "Rata-rata Kehadiran",
         upcoming_events: "Agenda Terdekat",
-        about_title: "Tentang Web Sekolah Ini",
-        about_desc: "Website ini adalah sistem manajemen sekolah modern yang dirancang untuk memudahkan administrasi akademik. Dibangun dengan teknologi terkini untuk memastikan kecepatan, keamanan, dan kemudahan penggunaan.",
-        features_title: "Fitur Utama",
-        tech_title: "Teknologi",
+        about_title: "Tentang Sekolah",
+        about_desc: "Sekolah kami adalah lembaga pendidikan yang berdedikasi untuk mencetak generasi unggul, berkarakter, dan siap menghadapi tantangan masa depan dengan kurikulum yang inovatif dan lingkungan belajar yang suportif.",
+        features_title: "Program Unggulan",
+        tech_title: "Visi & Misi",
         features_list: [
-            "Manajemen Data Siswa & Guru",
-            "Sistem Informasi Akademik",
-            "Berita & Pengumuman Sekolah",
-            "Galeri Kegiatan Sekolah"
+            "Kurikulum Berbasis Karakter",
+            "Program Ekstrakurikuler Beragam",
+            "Fasilitas Belajar Modern",
+            "Pembelajaran Digital Community"
         ],
         tech_list: [
-            "Next.js & React Framework",
-            "Tailwind CSS Styling",
-            "PWA Ready (Dukungan Mobile)",
-            "Realtime Database"
-        ]
+            "Mencetak Lulusan Berprestasi",
+            "Membangun Integritas & Etika",
+            "Mendorong Inovasi Teknologi",
+            "Menjalin Kolaborasi Global"
+        ],
+        chart_attendance: "Statistik Kehadiran Minggu Ini",
+        chart_distribution: "Distribusi Siswa"
     },
     assignments: {
         student_title: "Tugas & PR",

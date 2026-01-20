@@ -1,7 +1,8 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
+import html2canvas from "html2canvas";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
@@ -30,6 +31,31 @@ function UsersContent() {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<any>(null); // Modal Detail User
+    const idCardRef = useRef<HTMLDivElement>(null);
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownloadID = async () => {
+        if (!idCardRef.current) return;
+        setIsDownloading(true);
+        try {
+            const canvas = await html2canvas(idCardRef.current, {
+                backgroundColor: null,
+                scale: 2, // Higher resolution
+                useCORS: true, // For external images (like QR)
+                logging: false,
+            });
+            const image = canvas.toDataURL("image/png");
+            const link = document.createElement("a");
+            link.href = image;
+            link.download = `digital-id-${selectedUser.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+            link.click();
+        } catch (error) {
+            console.error("Failed to download ID:", error);
+            alert("Gagal mengunduh ID Card.");
+        } finally {
+            setIsDownloading(false);
+        }
+    };
 
     // Form States
     const [newUser, setNewUser] = useState({
@@ -392,66 +418,94 @@ function UsersContent() {
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in"
                     onClick={() => setSelectedUser(null)}
                 >
-                    <div
-                        className="relative w-[360px] h-[600px] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border-[6px] border-white dark:border-slate-800 flex flex-col"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        {/* ID Card Header / Background Pattern */}
-                        <div className="h-40 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 relative overflow-hidden shrinkage-0">
-                            <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
-                            <div className="absolute top-6 left-6 right-6 flex justify-between items-start z-10">
-                                <div>
-                                    <p className="text-[10px] font-black text-white/60 uppercase tracking-[0.3em]">Digital ID</p>
-                                    <h3 className="text-white font-black text-xl tracking-tight mt-1">WebSchooll</h3>
-                                </div>
-                                <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
-                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.23-2.913.66-4.294m9.34 2.94a10.08 10.08 0 01-1.795-1.92m-5.492 5.34a21.905 21.905 0 01-1.378-4.992M3 15.364A13.94 13.94 0 008 18a13.94 13.94 0 006-1.5M10.518 9.07a2 2 0 112 3.65m-2-3.65h.01m3.67 3.65h.01" /></svg>
+                    <div className="flex flex-col items-center gap-6">
+                        <div
+                            ref={idCardRef}
+                            className="relative w-[360px] h-[600px] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border-[6px] border-white dark:border-slate-800 flex flex-col"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* ID Card Header / Background Pattern */}
+                            <div className="h-40 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 relative overflow-hidden shrinkage-0">
+                                <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
+                                <div className="absolute top-6 left-6 right-6 flex justify-between items-start z-10">
+                                    <div>
+                                        <p className="text-[10px] font-black text-white/60 uppercase tracking-[0.3em]">Digital ID</p>
+                                        <h3 className="text-white font-black text-xl tracking-tight mt-1">WebSchooll</h3>
+                                    </div>
+                                    <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.23-2.913.66-4.294m9.34 2.94a10.08 10.08 0 01-1.795-1.92m-5.492 5.34a21.905 21.905 0 01-1.378-4.992M3 15.364A13.94 13.94 0 008 18a13.94 13.94 0 006-1.5M10.518 9.07a2 2 0 112 3.65m-2-3.65h.01m3.67 3.65h.01" /></svg>
+                                    </div>
                                 </div>
                             </div>
+
+                            {/* Profile Image (Floating) */}
+                            <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20">
+                                <div className="w-28 h-28 rounded-[2rem] bg-white dark:bg-slate-900 p-2 shadow-2xl">
+                                    <div className={`w-full h-full rounded-[1.5rem] flex items-center justify-center text-4xl font-black text-white bg-gradient-to-tr ${selectedUser.role === 'Admin' ? 'from-red-500 to-pink-600' : selectedUser.role === 'Guru' ? 'from-blue-500 to-cyan-600' : 'from-emerald-500 to-teal-600'}`}>
+                                        {selectedUser.name.charAt(0)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Card Content */}
+                            <div className="flex-1 bg-white dark:bg-slate-900 pt-16 px-8 pb-8 flex flex-col items-center text-center relative overflow-y-auto">
+                                {/* User details */}
+                                <h2 className="text-2xl font-black text-gray-900 dark:text-white leading-none mt-2">{selectedUser.name}</h2>
+                                <p className={`mt-2 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${selectedUser.role === 'Admin' ? 'text-red-500 border-red-100 bg-red-50 dark:bg-red-900/10 dark:border-red-900/30' : selectedUser.role === 'Guru' ? 'text-blue-500 border-blue-100 bg-blue-50 dark:bg-blue-900/10 dark:border-blue-900/30' : 'text-emerald-500 border-emerald-100 bg-emerald-50 dark:bg-emerald-900/10 dark:border-emerald-900/30'}`}>
+                                    {selectedUser.role === 'Admin' ? t.common_status.admin : selectedUser.role === 'Guru' ? t.common_status.teacher : t.common_status.student}
+                                </p>
+
+                                <div className="grid grid-cols-2 gap-4 w-full mt-6 mb-6">
+                                    <div className="bg-gray-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-gray-100 dark:border-slate-800">
+                                        <p className="text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">ID Number</p>
+                                        <p className="font-mono font-bold text-gray-800 dark:text-gray-200 text-sm">{String(selectedUser.id).padStart(6, '0')}</p>
+                                    </div>
+                                    <div className="bg-gray-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-gray-100 dark:border-slate-800">
+                                        <p className="text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">{selectedUser.role === 'Siswa' ? 'Kelas' : 'Department'}</p>
+                                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm truncate">{selectedUser.role === 'Siswa' ? selectedUser.kelas : 'Academic'}</p>
+                                    </div>
+                                </div>
+
+                                {/* QR Code Section */}
+                                <div className="mt-auto bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=ID: ${selectedUser.id}\nName: ${selectedUser.name}\nRole: ${selectedUser.role}`}
+                                        alt="ID QR"
+                                        className="w-32 h-32 object-contain mix-blend-multiply opacity-90"
+                                    />
+                                </div>
+                                <p className="text-[9px] text-gray-300 font-mono mt-3 tracking-widest uppercase">Verified Student ID</p>
+                            </div>
+
+                            {/* Holographic strip at bottom */}
+                            <div className="h-2 w-full bg-gradient-to-r from-transparent via-white/50 to-transparent absolute bottom-0 opacity-20 pointer-events-none"></div>
                         </div>
 
-                        {/* Profile Image (Floating) */}
-                        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20">
-                            <div className="w-28 h-28 rounded-[2rem] bg-white dark:bg-slate-900 p-2 shadow-2xl">
-                                <div className={`w-full h-full rounded-[1.5rem] flex items-center justify-center text-4xl font-black text-white bg-gradient-to-tr ${selectedUser.role === 'Admin' ? 'from-red-500 to-pink-600' : selectedUser.role === 'Guru' ? 'from-blue-500 to-cyan-600' : 'from-emerald-500 to-teal-600'}`}>
-                                    {selectedUser.name.charAt(0)}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Card Content */}
-                        <div className="flex-1 bg-white dark:bg-slate-900 pt-16 px-8 pb-8 flex flex-col items-center text-center relative overflow-y-auto">
-                            {/* User details */}
-                            <h2 className="text-2xl font-black text-gray-900 dark:text-white leading-none mt-2">{selectedUser.name}</h2>
-                            <p className={`mt-2 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${selectedUser.role === 'Admin' ? 'text-red-500 border-red-100 bg-red-50 dark:bg-red-900/10 dark:border-red-900/30' : selectedUser.role === 'Guru' ? 'text-blue-500 border-blue-100 bg-blue-50 dark:bg-blue-900/10 dark:border-blue-900/30' : 'text-emerald-500 border-emerald-100 bg-emerald-50 dark:bg-emerald-900/10 dark:border-emerald-900/30'}`}>
-                                {selectedUser.role === 'Admin' ? t.common_status.admin : selectedUser.role === 'Guru' ? t.common_status.teacher : t.common_status.student}
-                            </p>
-
-                            <div className="grid grid-cols-2 gap-4 w-full mt-6 mb-6">
-                                <div className="bg-gray-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-gray-100 dark:border-slate-800">
-                                    <p className="text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">ID Number</p>
-                                    <p className="font-mono font-bold text-gray-800 dark:text-gray-200 text-sm">{String(selectedUser.id).padStart(6, '0')}</p>
-                                </div>
-                                <div className="bg-gray-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-gray-100 dark:border-slate-800">
-                                    <p className="text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">{selectedUser.role === 'Siswa' ? 'Kelas' : 'Department'}</p>
-                                    <p className="font-bold text-gray-800 dark:text-gray-200 text-sm truncate">{selectedUser.role === 'Siswa' ? selectedUser.kelas : 'Academic'}</p>
-                                </div>
-                            </div>
-
-                            {/* QR Code Section */}
-                            <div className="mt-auto bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=ID: ${selectedUser.id}\nName: ${selectedUser.name}\nRole: ${selectedUser.role}`}
-                                    alt="ID QR"
-                                    className="w-32 h-32 object-contain mix-blend-multiply opacity-90"
-                                />
-                            </div>
-                            <p className="text-[9px] text-gray-300 font-mono mt-3 tracking-widest uppercase">Verified Student ID</p>
-                        </div>
-
-                        {/* Holographic strip at bottom */}
-                        <div className="h-2 w-full bg-gradient-to-r from-transparent via-white/50 to-transparent absolute bottom-0 opacity-20 pointer-events-none"></div>
+                        {/* Download Button */}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDownloadID();
+                            }}
+                            disabled={isDownloading}
+                            className="bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-6 py-3 rounded-full font-bold shadow-lg flex items-center space-x-2 hovered:scale-105 active:scale-95 transition-transform"
+                        >
+                            {isDownloading ? (
+                                <>
+                                    <svg className="animate-spin h-5 w-5 mr-1" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span>Mengunduh...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                    <span>Download ID Card</span>
+                                </>
+                            )}
+                        </button>
                     </div>
                 </div>
             )}

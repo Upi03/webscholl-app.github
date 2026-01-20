@@ -7,8 +7,10 @@ import { useRouter } from "next/navigation"
 import { useLanguage } from "@/app/contexts/LanguageContext"
 import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar"
+import Toast from "./components/Toast";
 
 import StudentDashboard from "./components/StudentDashboard";
+import DashboardCharts from "./components/DashboardCharts";
 
 export default function HomePage() {
   const router = useRouter();
@@ -16,6 +18,7 @@ export default function HomePage() {
   const { t, language } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState<{ username?: string; role?: string } | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -41,6 +44,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       {/* Navbar with Gradient */}
       <Navbar />
 
@@ -124,7 +128,58 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* About Web Project Section */}
+              {/* Analytics Charts */}
+              <DashboardCharts />
+
+              {/* Admin Broadcast Section */}
+              {userData?.role === 'admin' && (
+                <div className="bg-gradient-to-br from-indigo-600 to-purple-700 p-8 rounded-2xl shadow-xl text-white mb-8 border border-white/10 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+                    <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22a2 2 0 002-2H10a2 2 0 002 2zm6-6V10a6 6 0 00-9-5.16V4a3 3 0 00-6 0v.84A6 6 0 003 10v6l-2 2v1h18v-1l-2-2z" /></svg>
+                  </div>
+                  <div className="relative z-10">
+                    <h3 className="text-2xl font-black mb-2 flex items-center gap-2">
+                      <span className="p-2 bg-white/20 rounded-xl backdrop-blur-md">📢</span>
+                      Kirim Pengumuman Global
+                    </h3>
+                    <p className="text-indigo-100 text-sm mb-6 max-w-lg">Pesan ini akan dikirimkan ke seluruh siswa, guru, dan staff sekolah secara real-time melalui notifikasi sistem.</p>
+
+                    <div className="flex flex-col md:flex-row gap-4 items-end">
+                      <div className="flex-1 space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-indigo-200">Isi Pengumuman</label>
+                        <input
+                          type="text"
+                          id="broadcast-msg"
+                          placeholder="Ketik pengumuman penting di sini..."
+                          className="w-full px-6 py-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 outline-none transition-all"
+                        />
+                      </div>
+                      <button
+                        onClick={() => {
+                          const msg = (document.getElementById('broadcast-msg') as HTMLInputElement).value;
+                          if (msg) {
+                            if ("Notification" in window) {
+                              Notification.requestPermission().then(permission => {
+                                if (permission === "granted") {
+                                  new Notification("WebScholl Broadcast", { body: msg });
+                                  setToast({ message: "Pengumuman berhasil disebarkan!", type: "success" });
+                                  (document.getElementById('broadcast-msg') as HTMLInputElement).value = "";
+                                }
+                              });
+                            }
+                          }
+                        }}
+                        className="px-8 py-4 bg-white text-indigo-600 rounded-2xl font-black hover:bg-gray-100 transition-all active:scale-95 shadow-xl"
+                      >
+                        Kirim Sekarang
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* About School Section */}
+
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-bold text-gray-800 dark:text-white">{t.dashboard.about_title}</h3>

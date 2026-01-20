@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import QrScanner from "../components/QrScanner";
+import Toast from "../components/Toast";
 import { useLanguage } from "@/app/contexts/LanguageContext";
 
 export default function AttendancePage() {
@@ -10,6 +12,8 @@ export default function AttendancePage() {
     const [userData, setUserData] = useState<{ username?: string; email?: string; role?: string } | null>(null);
     const [isCheckedIn, setIsCheckedIn] = useState(false);
     const [checkInTime, setCheckInTime] = useState<string | null>(null);
+    const [showScanner, setShowScanner] = useState(false);
+    const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
     const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -70,9 +74,35 @@ export default function AttendancePage() {
         }, ...prev]);
     };
 
+    const handleScanResult = (decodedText: string) => {
+        try {
+            const scannedData = JSON.parse(decodedText);
+            setToast({ message: `Absensi siswa ${scannedData.username} berhasil dicatat!`, type: "success" });
+            setShowScanner(false);
+
+            // Re-use logic for adding to teacher students list if it were dynamic
+            // For now, just toast success and close.
+        } catch (e) {
+            setToast({ message: "Format QR Code tidak valid.", type: "error" });
+        }
+    };
+
     return (
         <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
             <Navbar />
+            {showScanner && (
+                <QrScanner
+                    onResult={handleScanResult}
+                    onClose={() => setShowScanner(false)}
+                />
+            )}
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
                 <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900">
@@ -142,7 +172,10 @@ export default function AttendancePage() {
                             </div>
                         ) : (
                             /* MANAGEMENT VIEW (Teachers/Admins) - Existing Logic */
-                            <AttendanceManagementView />
+                            <AttendanceManagementView
+                                userData={userData}
+                                setShowScanner={setShowScanner}
+                            />
                         )}
 
                     </div>
@@ -152,7 +185,7 @@ export default function AttendancePage() {
     );
 }
 
-function AttendanceManagementView() {
+function AttendanceManagementView({ userData, setShowScanner }: { userData: any, setShowScanner: (val: boolean) => void }) {
     const { t } = useLanguage();
     const [activeTab, setActiveTab] = useState<"students" | "teachers">("students");
 
@@ -189,6 +222,17 @@ function AttendanceManagementView() {
                         Kelola dan konfirmasi kehadiran siswa hari ini.
                     </p>
                 </div>
+                {(userData?.role === 'teacher' || userData?.role === 'admin') && (
+                    <button
+                        onClick={() => setShowScanner(true)}
+                        className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 dark:shadow-none transition-all active:scale-95"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Pindai QR Siswa
+                    </button>
+                )}
             </div>
 
             {/* PENDING REQUESTS SECTION */}

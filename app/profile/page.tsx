@@ -8,13 +8,24 @@ import { useLanguage } from "../contexts/LanguageContext";
 
 export default function ProfilePage() {
     const { t } = useLanguage();
-    const [userData, setUserData] = React.useState<{ username?: string; email?: string; role?: string } | null>(null);
+    const [userData, setUserData] = React.useState<{ username?: string; email?: string; role?: string; photo?: string } | null>(null);
 
     React.useEffect(() => {
         const storedUser = localStorage.getItem("currentUser");
         if (storedUser) {
             setUserData(JSON.parse(storedUser));
         }
+
+        // Listen for storage events to update photo in real-time
+        const handleStorageChange = () => {
+            const updatedUser = localStorage.getItem("currentUser");
+            if (updatedUser) {
+                setUserData(JSON.parse(updatedUser));
+            }
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
     }, []);
 
     const isStudent = userData?.role === "student";
@@ -54,10 +65,15 @@ export default function ProfilePage() {
 
                             <div className="flex flex-col md:flex-row gap-4 items-center md:items-end">
                                 <div className="relative">
-                                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 p-1 shadow-xl">
-                                        <div className="w-full h-full rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-blue-600 to-indigo-600">
-                                            {userData?.username?.substring(0, 2).toUpperCase() || "US"}
-                                        </div>
+                                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 p-1 shadow-xl overflow-hidden">
+                                        {userData?.photo ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
+                                            <img src={userData.photo} alt="Profile" className="w-full h-full object-cover rounded-xl" />
+                                        ) : (
+                                            <div className="w-full h-full rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-blue-600 to-indigo-600">
+                                                {userData?.username?.substring(0, 2).toUpperCase() || "US"}
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="absolute -bottom-1 -right-1 bg-green-500 border-4 border-white dark:border-gray-900 w-6 h-6 rounded-full shadow-lg"></div>
                                 </div>
