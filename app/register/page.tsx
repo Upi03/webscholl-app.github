@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -9,6 +9,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 export default function RegisterPage() {
     const { t } = useLanguage();
     const router = useRouter();
+    const [mounted, setMounted] = useState(false);
 
     //state Input
     const [email, setEmail] = useState("");
@@ -79,12 +80,28 @@ export default function RegisterPage() {
 
     const [success, setSuccess] = useState("");
 
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 font-sans">
+                <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 space-y-6">
+                    <div className="text-center">
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Loading...</h1>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-600 via-red-700 to-blue-900 p-4 font-sans relative overflow-hidden">
             {/* Animated Background Elements */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-red-500/20 rounded-full blur-[120px] animate-pulse"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[120px] animate-pulse [animation-delay:2s]"></div>
             </div>
 
             {/* Success Notification Toast */}

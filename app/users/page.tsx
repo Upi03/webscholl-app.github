@@ -33,6 +33,9 @@ function UsersContent() {
     const [selectedUser, setSelectedUser] = useState<any>(null); // Modal Detail User
     const idCardRef = useRef<HTMLDivElement>(null);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [editingUserId, setEditingUserId] = useState<number | null>(null);
+    const [editingName, setEditingName] = useState("");
+    const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
 
     const handleDownloadID = async () => {
         if (!idCardRef.current) return;
@@ -104,6 +107,17 @@ function UsersContent() {
         return () => clearTimeout(timer);
     }, [page, searchQuery, filterKelas, filterRole, dobStart, dobEnd]);
 
+    // Get current user role
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedUser = localStorage.getItem("currentUser");
+            if (storedUser) {
+                const user = JSON.parse(storedUser);
+                setCurrentUserRole(user.role);
+            }
+        }
+    }, []);
+
     //Fungsi Navigasi Pagintion
     const handlePageChange = (newPage: number) => {
         router.push(`/users?page=${newPage}`);
@@ -127,6 +141,29 @@ function UsersContent() {
         setIsModalOpen(false);
         setNewUser({ name: "", email: "", role: "Siswa", kelas: "XII-RPL", tanggalLahir: "" });
         // Optional: show toast
+    };
+
+    const handleStartEdit = (userId: number, currentName: string) => {
+        // Only allow Admin and Teacher to edit
+        if (currentUserRole === "admin" || currentUserRole === "teacher") {
+            setEditingUserId(userId);
+            setEditingName(currentName);
+        }
+    };
+
+    const handleSaveEdit = (userId: number) => {
+        if (editingName.trim() === "") {
+            alert("Nama tidak boleh kosong!");
+            return;
+        }
+        setUsers(users.map(u => u.id === userId ? { ...u, name: editingName } : u));
+        setEditingUserId(null);
+        setEditingName("");
+    };
+
+    const handleCancelEdit = () => {
+        setEditingUserId(null);
+        setEditingName("");
     };
 
     return (
@@ -279,7 +316,55 @@ function UsersContent() {
                                                     onClick={() => setSelectedUser(user)}
                                                 >
                                                     <td className="px-8 py-8 text-sm font-bold text-gray-400 dark:text-gray-500">{user.id}</td>
-                                                    <td className="px-8 py-8 text-lg font-black text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">{user.name}</td>
+                                                    <td
+                                                        className="px-8 py-8 text-lg font-black text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors relative group/name"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        {editingUserId === user.id ? (
+                                                            <div className="flex items-center gap-2">
+                                                                <input
+                                                                    type="text"
+                                                                    value={editingName}
+                                                                    onChange={(e) => setEditingName(e.target.value)}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'Enter') handleSaveEdit(user.id);
+                                                                        if (e.key === 'Escape') handleCancelEdit();
+                                                                    }}
+                                                                    onBlur={() => handleSaveEdit(user.id)}
+                                                                    autoFocus
+                                                                    className="px-3 py-1 border-2 border-blue-500 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-gray-900 dark:text-white outline-none font-black"
+                                                                />
+                                                                <button
+                                                                    onClick={() => handleSaveEdit(user.id)}
+                                                                    className="p-1 text-green-600 hover:bg-green-50 rounded"
+                                                                >
+                                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                                                                </button>
+                                                                <button
+                                                                    onClick={handleCancelEdit}
+                                                                    className="p-1 text-red-600 hover:bg-red-50 rounded"
+                                                                >
+                                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <div
+                                                                className="flex items-center gap-2"
+                                                                onDoubleClick={() => handleStartEdit(user.id, user.name)}
+                                                            >
+                                                                <span>{user.name}</span>
+                                                                {(currentUserRole === "admin" || currentUserRole === "teacher") && (
+                                                                    <button
+                                                                        onClick={() => handleStartEdit(user.id, user.name)}
+                                                                        className="opacity-0 group-hover/name:opacity-100 transition-opacity p-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
+                                                                        title="Edit nama"
+                                                                    >
+                                                                        <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </td>
                                                     <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-bold">{user.email}</td>
                                                     <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-black">{user.role === 'Siswa' ? user.kelas : '-'}</td>
                                                     <td className="px-8 py-8 text-sm text-gray-500 dark:text-gray-400 font-bold italic">
@@ -450,7 +535,45 @@ function UsersContent() {
                             {/* Card Content */}
                             <div className="flex-1 bg-white dark:bg-slate-900 pt-16 px-8 pb-8 flex flex-col items-center text-center relative overflow-y-auto">
                                 {/* User details */}
-                                <h2 className="text-2xl font-black text-gray-900 dark:text-white leading-none mt-2">{selectedUser.name}</h2>
+                                <div className="flex flex-col items-center gap-2 group/name relative">
+                                    {selectedUser.isEditing ? (
+                                        <div className="flex flex-col items-center gap-2">
+                                            <input
+                                                autoFocus
+                                                defaultValue={selectedUser.name}
+                                                onBlur={(e) => {
+                                                    const newName = e.target.value;
+                                                    if (newName && newName !== selectedUser.name) {
+                                                        setUsers(users.map(u => u.id === selectedUser.id ? { ...u, name: newName } : u));
+                                                        setSelectedUser({ ...selectedUser, name: newName, isEditing: false });
+                                                    } else {
+                                                        setSelectedUser({ ...selectedUser, isEditing: false });
+                                                    }
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') e.currentTarget.blur();
+                                                    if (e.key === 'Escape') setSelectedUser({ ...selectedUser, isEditing: false });
+                                                }}
+                                                className="text-2xl font-black text-gray-900 dark:text-white leading-none text-center bg-transparent border-b-2 border-blue-500 outline-none w-full max-w-[280px]"
+                                            />
+                                            <p className="text-[9px] text-blue-500 font-bold uppercase tracking-widest animate-pulse text-center">Tekan Enter untuk Simpan</p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col items-center gap-2">
+                                            <h2 className="text-2xl font-black text-gray-900 dark:text-white leading-none mt-2">{selectedUser.name}</h2>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedUser({ ...selectedUser, isEditing: true });
+                                                }}
+                                                className="opacity-0 group-hover/name:opacity-100 transition-opacity flex items-center gap-1.5 text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-wider"
+                                            >
+                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                                Ganti Nama
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                                 <p className={`mt-2 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${selectedUser.role === 'Admin' ? 'text-red-500 border-red-100 bg-red-50 dark:bg-red-900/10 dark:border-red-900/30' : selectedUser.role === 'Guru' ? 'text-blue-500 border-blue-100 bg-blue-50 dark:bg-blue-900/10 dark:border-blue-900/30' : 'text-emerald-500 border-emerald-100 bg-emerald-50 dark:bg-emerald-900/10 dark:border-emerald-900/30'}`}>
                                     {selectedUser.role === 'Admin' ? t.common_status.admin : selectedUser.role === 'Guru' ? t.common_status.teacher : t.common_status.student}
                                 </p>

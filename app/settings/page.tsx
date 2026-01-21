@@ -225,7 +225,22 @@ export default function SettingsPage() {
                                                     onChange={(e) => setUserData(prev => prev ? { ...prev, username: e.target.value } : { username: e.target.value })}
                                                     className={`w-full px-5 py-3.5 rounded-2xl border ${isStudent ? 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 cursor-not-allowed text-gray-500' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none'} transition-all font-bold text-gray-900 dark:text-white`}
                                                 />
-                                                {isStudent && <p className="text-[10px] text-orange-500 font-bold ml-1 uppercase">Siswa tidak dapat mengubah nama</p>}
+                                                {isStudent && (
+                                                    <div className="flex flex-col gap-2">
+                                                        <p className="text-[10px] text-orange-500 font-bold ml-1 uppercase">Siswa tidak dapat mengubah nama</p>
+                                                        <a
+                                                            href="https://wa.me/6281259013095" // Example link
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex items-center gap-2 w-fit px-4 py-2 bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-orange-200 dark:hover:bg-orange-900/40 transition-all active:scale-95 shadow-sm border border-orange-200 dark:border-orange-800/30"
+                                                        >
+                                                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                                                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.767 5.767 0 1.267.418 2.438 1.121 3.388l-1.121 3.388 3.388-1.121c.95.703 2.121 1.121 3.388 1.121 3.181 0 5.767-2.586 5.767-5.767 0-3.181-2.586-5.767-5.767-5.767zm0 10.518c-1.041 0-2.007-.291-2.834-.799l-2.003.664.664-2.003c-.508-.827-.799-1.793-.799-2.834 0-2.616 2.152-4.767 4.767-4.767s4.767 2.151 4.767 4.767-2.151 4.767-4.767 4.767z" />
+                                                            </svg>
+                                                            Hubungi Guru untuk Ganti Nama
+                                                        </a>
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest ml-1">{t.settings_page.general.email}</label>
