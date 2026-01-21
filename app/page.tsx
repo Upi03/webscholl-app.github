@@ -66,10 +66,10 @@ export default function HomePage() {
 
 
               {/* Hero / Welcome Section */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden transition-colors duration-300">
+              <div className="bg-gradient-to-r from-red-800 to-slate-900 text-white rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden transition-colors duration-300">
                 <div className="relative z-10">
-                  <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">{t.dashboard.welcome_hero}, {userData?.username || "Admin"}! 👋</h2>
-                  <p className="text-gray-500 dark:text-gray-400 max-w-xl">
+                  <h2 className="text-3xl font-extrabold text-white mb-2">{t.dashboard.welcome_hero}, {userData?.username || "Admin"}! 👋</h2>
+                  <p className="text-red-100 max-w-xl">
                     {t.dashboard.hero_desc}
                   </p>
                 </div>
@@ -137,7 +137,7 @@ export default function HomePage() {
 
               {/* Teacher/Admin Notification Section */}
               {(userData?.role === 'admin' || userData?.role === 'teacher') && (
-                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-2xl shadow-xl text-white mb-8 border border-white/10 relative overflow-hidden group">
+                <div className="bg-gradient-to-br from-red-600 to-blue-900 p-8 rounded-2xl shadow-xl text-white mb-8 border border-white/10 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
                     <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22a2 2 0 002-2H10a2 2 0 002 2zm6-6V10a6 6 0 00-9-5.16V4a3 3 0 00-6 0v.84A6 6 0 003 10v6l-2 2v1h18v-1l-2-2z" /></svg>
                   </div>
