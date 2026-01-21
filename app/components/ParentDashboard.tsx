@@ -9,6 +9,7 @@ export default function ParentDashboard({ userData }: { userData: any }) {
     const childData = {
         name: "Budi Santoso",
         class: "10-A",
+        photoUrl: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80",
         billing: {
             total: "Rp 500.000",
             dueDate: "10 Feb 2026",
@@ -56,8 +57,12 @@ export default function ParentDashboard({ userData }: { userData: any }) {
                         <p className="text-xl font-black text-blue-600 dark:text-blue-400">{childData.class}</p>
                     </div>
                     <div className="relative">
-                        <div className="w-16 h-16 bg-gradient-to-tr from-red-500 to-blue-600 rounded-full flex items-center justify-center text-3xl shadow-lg ring-4 ring-white dark:ring-gray-800">
-                            👦
+                        <div className="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-red-500 to-blue-600 shadow-lg ring-4 ring-white dark:ring-gray-800">
+                            <img
+                                src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
+                                alt={childData.name}
+                                className="w-full h-full rounded-full object-cover border-2 border-white dark:border-gray-900"
+                            />
                         </div>
                         <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center text-[10px] text-white font-bold">✓</div>
                     </div>
