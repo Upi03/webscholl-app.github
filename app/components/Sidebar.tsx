@@ -48,9 +48,14 @@ export default function Sidebar() {
         return false;
     }
 
-    const linkClass = (path: string) => `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive(path)
-        ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shadow-sm"
-        : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"}`
+    const isParent = userData?.role === "parent";
+
+    const linkClass = (path: string) => {
+        const activeBase = "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 shadow-sm";
+        const inactiveBase = "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white";
+
+        return `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive(path) ? activeBase : inactiveBase}`;
+    }
 
     return (
         <>
@@ -67,17 +72,17 @@ export default function Sidebar() {
                     {/* Logo Section */}
                     <div className="flex items-center justify-between mb-8 px-2">
                         <Link href="/" className="flex items-center gap-3 group">
-                            <div className="p-2 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
+                            <div className={`p-2 bg-gradient-to-tr from-red-600 to-blue-700 rounded-xl shadow-lg shadow-red-500/20 group-hover:scale-105 transition-transform duration-300`}>
                                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                 </svg>
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-lg font-bold text-gray-900 dark:text-white tracking-tight leading-none">
-                                    Web<span className="text-blue-600 dark:text-blue-400">Schooll</span>
+                                    Web<span className="text-red-600 dark:text-red-400">Schooll</span>
                                 </span>
                                 <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Management
+                                    {isParent ? "Parent Portal" : "Management"}
                                 </span>
                             </div>
                         </Link>
@@ -90,76 +95,77 @@ export default function Sidebar() {
                     </div>
 
                     <div className="mb-4 px-2">
-                        <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest pl-2 border-l-2 border-blue-500/50">{t.sidebar.menu_title}</p>
+                        <p className={`text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest pl-2 border-l-2 border-red-500/50`}>{t.sidebar.menu_title}</p>
                     </div>
                     <ul className="space-y-1">
                         <li>
                             <Link href="/" className={linkClass("/")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                 </svg>
-                                <span>{t.sidebar.dashboard}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.dashboard : t.sidebar.dashboard}</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/news" className={linkClass("/news")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                 </svg>
-                                <span>{t.sidebar.news}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.news : t.sidebar.news}</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/map" className={linkClass("/map")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 20l-5.447-2.724A2 2 0 013 15.487V6.512a2 2 0 011.133-1.79l5.447-2.724a2 2 0 011.84 0l5.447 2.724A2 2 0 0118 6.512v8.975a2 2 0 01-1.133 1.79L11.42 20a2 2 0 01-1.84 0zM9 4.236L3.99 6.74v8.197l5.01-2.505V4.236zM11 4.236v8.196l5.01 2.505V6.741L11 4.236z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
-                                <span>{t.sidebar.map}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.map : t.sidebar.map}</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/attendance" className={linkClass("/attendance")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>{t.sidebar.attendance}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.attendance : t.sidebar.attendance}</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/assignments" className={linkClass("/assignments")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                 </svg>
-                                <span>{t.sidebar.assignments}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.assignments : t.sidebar.assignments}</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/schedule" className={linkClass("/schedule")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>{t.sidebar.schedule}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.schedule : t.sidebar.schedule}</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/reports" className={linkClass("/reports")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 2v-6m-8-4h5l5 5v11a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2h2z" />
                                 </svg>
-                                <span>{t.sidebar.reports}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.reports : t.sidebar.reports}</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/billing" className={linkClass("/billing")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span>{t.sidebar.billing || "Tagihan"}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.billing : t.sidebar.billing}</span>
                             </Link>
                         </li>
 
                         {/* Restricted Management Links */}
-                        {userData?.role !== "student" && (
+                        {(userData?.role === "admin" || userData?.role === "teacher") && (
                             <>
                                 <div className="pt-4 pb-2">
                                     <p className="px-4 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Management</p>
@@ -191,79 +197,74 @@ export default function Sidebar() {
                             </>
                         )}
 
-                        {/* Detailed/Technical Utilities Collapsible */}
-                        <li className="pt-2">
-                            <button
-                                onClick={() => setIsUtilitiesOpen(!isUtilitiesOpen)}
-                                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg font-medium transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white`}
-                            >
-                                <div className="flex items-center space-x-3">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        {/* Detailed/Technical Utilities Collapsible - Hidden for Parents & Students */}
+                        {(userData?.role === "admin" || userData?.role === "teacher") && (
+                            <li className="pt-2">
+                                <button
+                                    onClick={() => setIsUtilitiesOpen(!isUtilitiesOpen)}
+                                    className={`w-full flex items-center justify-between px-4 py-3 rounded-lg font-medium transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white`}
+                                >
+                                    <div className="flex items-center space-x-3">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                        <span>Utilities</span>
+                                    </div>
+                                    <svg className={`w-4 h-4 transition-transform duration-200 ${isUtilitiesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Utilities</span>
-                                </div>
-                                <svg className={`w-4 h-4 transition-transform duration-200 ${isUtilitiesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-
-                            {isUtilitiesOpen && (
-                                <ul className="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 dark:border-gray-800 pl-2">
-                                    {userData?.role !== "student" && (
+                                </button>
+                                {isUtilitiesOpen && (
+                                    <ul className="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 dark:border-gray-800 pl-2">
                                         <li>
                                             <Link href="/analytics" className={linkClass("/analytics")}>
                                                 <span className="text-sm">{t.sidebar.analytics}</span>
                                             </Link>
                                         </li>
-                                    )}
-                                    <li>
-                                        <Link href="/media" className={linkClass("/media")}>
-                                            <span className="text-sm">{t.sidebar.media}</span>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/image-compression" className={linkClass("/image-compression")}>
-                                            <span className="text-sm">{t.sidebar.compression}</span>
-                                        </Link>
-                                    </li>
-                                    {userData?.role !== "student" && (
-                                        <>
-                                            <li>
-                                                <Link href="/sprite" className={linkClass("/sprite")}>
-                                                    <span className="text-sm">{t.sidebar.sprite}</span>
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link href="/realtime-db" className={linkClass("/realtime-db")}>
-                                                    <span className="text-sm">{t.sidebar.realtime_db}</span>
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link href="/indexeddb" className={linkClass("/indexeddb")}>
-                                                    <span className="text-sm">{t.sidebar.indexed_db}</span>
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link href="/storage" className={linkClass("/storage")}>
-                                                    <span className="text-sm">{t.sidebar.storage}</span>
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link href="/pwa" className={linkClass("/pwa")}>
-                                                    <span className="text-sm">{t.sidebar.pwa_settings}</span>
-                                                </Link>
-                                            </li>
-                                        </>
-                                    )}
-                                </ul>
-                            )}
-                        </li>
+                                        <li>
+                                            <Link href="/media" className={linkClass("/media")}>
+                                                <span className="text-sm">{t.sidebar.media}</span>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/image-compression" className={linkClass("/image-compression")}>
+                                                <span className="text-sm">{t.sidebar.compression}</span>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/sprite" className={linkClass("/sprite")}>
+                                                <span className="text-sm">{t.sidebar.sprite}</span>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/realtime-db" className={linkClass("/realtime-db")}>
+                                                <span className="text-sm">{t.sidebar.realtime_db}</span>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/indexeddb" className={linkClass("/indexeddb")}>
+                                                <span className="text-sm">{t.sidebar.indexed_db}</span>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/storage" className={linkClass("/storage")}>
+                                                <span className="text-sm">{t.sidebar.storage}</span>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/pwa" className={linkClass("/pwa")}>
+                                                <span className="text-sm">{t.sidebar.pwa_settings}</span>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                )}
+                            </li>
+                        )}
 
                         <div className="pt-4 pb-2">
                             <p className="px-4 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Settings</p>
                         </div>
-                        {userData?.role !== "student" && (
+                        {(userData?.role === "admin" || userData?.role === "teacher") && (
                             <li>
                                 <Link href="/settings" className={linkClass("/settings")}>
                                     <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -277,9 +278,9 @@ export default function Sidebar() {
                         <li>
                             <Link href="/profile" className={linkClass("/profile")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>{t.sidebar.profile}</span>
+                                <span>{isParent ? (t as any).sidebar_parent.profile : t.sidebar.profile}</span>
                             </Link>
                         </li>
                     </ul>
@@ -292,7 +293,7 @@ export default function Sidebar() {
                 {/* User Profile Section Bottom */}
                 <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
                     <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold shadow-sm overflow-hidden">
+                        <div className={`w-10 h-10 rounded-full bg-gradient-to-tr from-red-600 to-blue-600 flex items-center justify-center text-white font-bold shadow-sm overflow-hidden`}>
                             {userData?.photo ? (
                                 // eslint-disable-next-line @next/next/no-img-element
                                 <img src={userData.photo} alt="Profile" className="w-full h-full object-cover" />

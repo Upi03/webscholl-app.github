@@ -11,10 +11,10 @@ export default function StudentDashboard({ userData }: { userData: any }) {
     return (
         <div className="max-w-6xl mx-auto space-y-8">
             {/* Hero / Welcome Section for Student */}
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-8 shadow-lg text-white relative overflow-hidden">
+            <div className="bg-gradient-to-r from-red-600 to-blue-700 rounded-2xl p-8 shadow-lg text-white relative overflow-hidden">
                 <div className="relative z-10">
                     <h2 className="text-3xl font-extrabold mb-2">{t.student_dashboard.greeting} {userData?.username || "Siswa"}! 🎓</h2>
-                    <p className="text-blue-100 max-w-xl">
+                    <p className="text-red-50 max-w-xl">
                         {t.student_dashboard.welcome_desc}
                     </p>
                 </div>
@@ -37,7 +37,7 @@ export default function StudentDashboard({ userData }: { userData: any }) {
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                     <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.student_dashboard.average_score}</h3>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">88.5</p>
-                    <span className="text-xs text-blue-500">{t.student_dashboard.keep_it_up}</span>
+                    <span className="text-xs text-red-500">{t.student_dashboard.keep_it_up}</span>
                 </div>
             </div>
 
@@ -46,7 +46,7 @@ export default function StudentDashboard({ userData }: { userData: any }) {
                 <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">{t.student_dashboard.today_schedule}</h3>
                 <div className="space-y-4">
                     {t.student_dashboard.schedule_list.map((item) => (
-                        <div key={item.id} className={`flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors border-l-4 ${item.color === 'blue' ? 'border-blue-500' : item.color === 'green' ? 'border-green-500' : 'border-purple-500'
+                        <div key={item.id} className={`flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors border-l-4 ${item.color === 'blue' ? 'border-red-500' : item.color === 'green' ? 'border-green-500' : 'border-blue-500'
                             }`}>
                             <div className="w-20 text-sm font-bold text-gray-500">{item.time}</div>
                             <div>

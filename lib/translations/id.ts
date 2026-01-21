@@ -22,7 +22,8 @@ export const id = {
         search_placeholder: "Cari fitur atau nama siswa... (K)",
         notifications: "Notifikasi",
         new_notifications: "Baru",
-        simulation: "Simulasi Notifikasi Baru",
+        no_notifications: "Tidak ada notifikasi baru",
+        simulation: "Tandai Semua Dibaca",
         navigation: "Navigasi",
         student_label: "Siswa",
         notification_simulation_toast: "Notifikasi Baru: Pengumuman Libur Sekolah!"
@@ -53,6 +54,17 @@ export const id = {
         school_info: "Info Sekolah",
         user_account: "Akun Pengguna",
         user_email: "user@sekolah.com"
+    },
+    sidebar_parent: {
+        dashboard: "Beranda Pantauan",
+        news: "Pengumuman",
+        map: "Lokasi Sekolah",
+        attendance: "Kehadiran Anak",
+        assignments: "Tugas & PR Anak",
+        schedule: "Jadwal Belajar",
+        reports: "E-Raport Digital",
+        billing: "Pembayaran SPP",
+        profile: "Profil Wali"
     },
     dashboard: {
         welcome: "Selamat Datang kembali,",
@@ -128,6 +140,30 @@ export const id = {
             { id: 2, time: "09:30", subject: "Bahasa Inggris", teacher: "Ms. Sarah", room: "Lab Bahasa", color: "green" },
             { id: 3, time: "11:00", subject: "Fisika", teacher: "Bu Rina", room: "Lab IPA", color: "purple" }
         ]
+    },
+    parent_dashboard: {
+        greeting: "Halo, Orang Tua/Wali",
+        welcome_desc: "Pantau perkembangan akademik dan administrasi anak Anda dengan mudah.",
+        child_profile: "Profil Anak",
+        child_name: "Nama Siswa",
+        child_class: "Kelas",
+        billing_status: "Status SPP",
+        late_assignments: "Tugas Terlambat",
+        attendance_summary: "Rekap Kehadiran",
+        attendance_target: "Minimal Kehadiran 90%",
+        monitoring_hub: "Pusat Pantauan Anak",
+        today_presence: "Status Kehadiran Hari Ini",
+        present_at: "Hadir pada pukul",
+        not_present_yet: "Belum melakukan scan masuk",
+        assignment_status: "Status Tugas & PR",
+        urgent_assignments: "Tugas Terlambat",
+        pending_assignments: "Tugas Belum Selesai",
+        all_clear: "Hebat! Semua tugas sudah dikerjakan.",
+        total_billing: "Total Tagihan",
+        due_date: "Jatuh Tempo",
+        paid: "Lunas",
+        unpaid: "Belum Lunas",
+        view_billing: "Lihat Detail Tagihan"
     },
     contact: {
         title: "Hubungi Kami",
@@ -266,6 +302,7 @@ export const id = {
         login_subtitle: "Silahkan login untuk mengakses ke Dashboard",
         login_as: "Masuk Sebagai",
         student: "Siswa",
+        parent: "Wali Murid",
         admin_teacher: "Guru / Admin",
         email_user: "Email atau Username",
         password: "Password",
@@ -275,6 +312,7 @@ export const id = {
         register_title: "Buat Akun Baru",
         register_subtitle: "Silahkan daftar untuk mulai menggunakan Dashboard",
         username: "Username",
+        fullname: "Nama Lengkap",
         confirm_password: "Konfirmasi Password",
         register_button: "Daftar",
         have_account: "Sudah punya akun?",
@@ -386,6 +424,16 @@ export const id = {
         original_format: "Format Asli (Terkompresi)",
         webp_format: "Format WebP"
     },
+    notifications: {
+        create_title: "Buat Pengumuman Sekolah",
+        create_desc: "Kirim notifikasi real-time ke seluruh siswa dan staff.",
+        form_title: "Judul Pengumuman",
+        form_message: "Isi Pesan",
+        form_placeholder_title: "Contoh: Info Libur Sekolah",
+        form_placeholder_message: "Ketik pengumuman di sini...",
+        send_btn: "Kirim Pengumuman",
+        success_msg: "Pengumuman berhasil disebarkan!",
+    },
     realtime_page: {
         title: "Todo List dengan Supabase",
         subtitle: "Todo List dengan Supabase dan Notifikasi",
@@ -481,6 +529,7 @@ export const id = {
         all: "Semua",
         admin: "Admin",
         teacher: "Guru",
-        student: "Siswa"
+        student: "Siswa",
+        parent: "Wali Murid"
     }
 };

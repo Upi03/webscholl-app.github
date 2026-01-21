@@ -18,6 +18,16 @@ export default function BillingPage() {
     const { t } = useLanguage();
     const [mounted, setMounted] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+    const [userData, setUserData] = useState<{ username?: string; role?: string } | null>(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("currentUser");
+        if (storedUser) {
+            setUserData(JSON.parse(storedUser));
+        }
+    }, []);
+
+    const isParent = userData?.role === "parent";
 
     const transactions: Transaction[] = [
         { id: "TX-9012", description: "SPP January 2026", amount: 500000, date: "2026-01-05", status: "Paid" },
@@ -50,16 +60,20 @@ export default function BillingPage() {
                 <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900 transition-colors duration-300">
                     <div className="max-w-6xl mx-auto">
                         <header className="mb-10">
-                            <h1 className="text-3xl font-black text-gray-900 dark:text-white">Billing & Payments</h1>
-                            <p className="text-gray-500 dark:text-gray-400">Manage your school fees and payment history.</p>
+                            <h1 className="text-3xl font-black text-gray-900 dark:text-white">
+                                {isParent ? "Tagihan & Pembayaran Anak" : "Billing & Payments"}
+                            </h1>
+                            <p className="text-gray-500 dark:text-gray-400">
+                                {isParent ? "Pantau status pembayaran SPP dan administrasi anak Anda." : "Manage your school fees and payment history."}
+                            </p>
                         </header>
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
                             {/* Summary Card */}
-                            <div className="lg:col-span-2 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-8 text-white shadow-xl flex flex-col justify-between">
+                            <div className={`lg:col-span-2 bg-gradient-to-br from-red-600 to-blue-700 rounded-3xl p-8 text-white shadow-xl flex flex-col justify-between`}>
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <p className="text-indigo-100 font-medium mb-1 uppercase tracking-widest text-xs">Due Amount</p>
+                                        <p className={`text-red-100 font-medium mb-1 uppercase tracking-widest text-xs`}>Due Amount</p>
                                         <h2 className="text-5xl font-black tracking-tighter">{formatCurrency(500000)}</h2>
                                     </div>
                                     <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-md">
@@ -70,13 +84,13 @@ export default function BillingPage() {
                                 </div>
                                 <div className="mt-12 flex items-center justify-between">
                                     <div className="flex -space-x-3">
-                                        <div className="w-10 h-10 rounded-full border-2 border-white bg-indigo-400 flex items-center justify-center font-bold text-xs italic">VISA</div>
+                                        <div className={`w-10 h-10 rounded-full border-2 border-white bg-red-400 flex items-center justify-center font-bold text-xs italic`}>VISA</div>
                                         <div className="w-10 h-10 rounded-full border-2 border-white bg-blue-500 flex items-center justify-center font-bold text-[10px] italic">BCA</div>
                                         <div className="w-10 h-10 rounded-full border-2 border-white bg-green-500 flex items-center justify-center font-bold text-[10px] italic">OVO</div>
                                     </div>
                                     <button
                                         onClick={() => setToast({ message: "Checkout system pending integration", type: "success" })}
-                                        className="px-8 py-3 bg-white text-indigo-700 rounded-2xl font-black hover:bg-gray-100 transition-all active:scale-95 shadow-lg"
+                                        className={`px-8 py-3 bg-white text-red-700 rounded-2xl font-black hover:bg-gray-100 transition-all active:scale-95 shadow-lg`}
                                     >
                                         Pay Now
                                     </button>
@@ -99,7 +113,7 @@ export default function BillingPage() {
                         <div className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm">
                             <div className="p-6 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex justify-between items-center">
                                 <h3 className="font-black text-gray-900 dark:text-white uppercase tracking-tight">Recent Transactions</h3>
-                                <button className="text-indigo-600 dark:text-indigo-400 text-sm font-bold">View Statements</button>
+                                <button className={`text-red-600 dark:text-red-400 text-sm font-bold`}>View Statements</button>
                             </div>
                             <div className="divide-y divide-gray-100 dark:divide-gray-700">
                                 {transactions.map((tx) => (

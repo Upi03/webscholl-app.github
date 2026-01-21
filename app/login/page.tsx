@@ -15,7 +15,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [confrimPassword, setConfrimPassword] = useState("");
     const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
-    const [role, setRole] = useState<"student" | "admin">("student");
+    const [role, setRole] = useState<"student" | "admin" | "parent">("student");
 
     //state error
     const [error, setError] = useState("");
@@ -80,9 +80,15 @@ export default function LoginPage() {
 
         // Simpan sesi ke localStorage
         const isDefaultAdmin = identifier === defaultAdmin.email || identifier === defaultAdmin.username;
-        const userData = isDefaultAdmin
-            ? { ...defaultAdmin, username: "Admin", role: "admin" }
-            : { ...storedUser, role: role }; // Assign selected role to user
+        let userData;
+
+        if (isDefaultAdmin) {
+            const savedAdminProfile = JSON.parse(localStorage.getItem("adminProfile") || "{}");
+            userData = { ...defaultAdmin, username: "Admin", role: "admin", ...savedAdminProfile };
+        } else {
+            userData = { ...storedUser, role: role };
+        }
+
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("currentUser", JSON.stringify(userData));
 
@@ -93,7 +99,13 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 font-sans relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-600 via-red-700 to-blue-900 p-4 font-sans relative overflow-hidden">
+            {/* Animated Background Elements */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-red-500/20 rounded-full blur-[120px] animate-pulse"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+            </div>
+
             {/* Success Notification Toast */}
             {success && (
                 <div className="fixed top-6 right-6 bg-white border-l-4 border-green-500 shadow-2xl rounded-r-xl p-4 flex items-center space-x-4 animate-slide-in-right z-50 transition-all duration-300 transform translate-x-0">
@@ -109,73 +121,95 @@ export default function LoginPage() {
                 </div>
             )}
 
-            <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 space-y-6 relative z-10 border border-gray-100 dark:border-gray-800">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.auth_page.login_title}</h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t.auth_page.login_subtitle}</p>
+            <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl relative z-10 border border-white/20 dark:border-gray-800/50 overflow-hidden">
+                {/* Solid Red Header Banner */}
+                <div className="bg-red-700 p-8 text-center text-white relative">
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <svg className="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.45l8.15 14.55H3.85L12 5.45zM11 10v4h2v-4h-2zm0 6h2v2h-2v-2z" /></svg>
+                    </div>
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-lg rounded-2xl mb-4">
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18 18.247 18.477 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <h1 className="text-3xl font-black tracking-tighter">
+                        Web<span className="opacity-80">Schooll</span>
+                    </h1>
+                    <p className="text-xs font-black uppercase tracking-[0.3em] text-red-100 mt-1">{t.auth_page.login_title}</p>
                 </div>
-                {error && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center border border-red-200">
-                        {error}
-                    </div>
-                )}
 
-                <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.auth_page.login_as}</label>
-                        <select
-                            value={role}
-                            onChange={(e) => setRole(e.target.value as "student" | "admin")}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                <div className="p-8 pt-6 space-y-6">
+                    {error && (
+                        <div className="bg-red-50 text-red-600 p-4 rounded-2xl text-sm font-bold border border-red-100 flex items-center gap-3">
+                            <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.auth_page.login_as}</label>
+                            <select
+                                value={role}
+                                onChange={(e) => setRole(e.target.value as "student" | "admin" | "parent")}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                            >
+                                <option value="student">{t.auth_page.student}</option>
+                                <option value="parent">{t.auth_page.parent}</option>
+                                <option value="admin">{t.auth_page.admin_teacher}</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                {role === "student" ? (t.auth_page.fullname || "Nama Lengkap") : t.auth_page.email_user}
+                            </label>
+                            <input
+                                type="text"
+                                value={identifier}
+                                onChange={(e) => setIdentifier(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                                placeholder={role === "student" ? (t.auth_page.fullname || "Nama Lengkap") : t.auth_page.email_user}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.auth_page.password}</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                                placeholder="••••••••"
+                            />
+                        </div>
+
+                        <div className="flex justify-center pt-2">
+                            <ReCAPTCHA
+                                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+                                onChange={(value) => setRecaptchaValue(value)}
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-black py-3.5 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] shadow-xl shadow-red-500/20 active:scale-95 flex items-center justify-center gap-2 group"
                         >
-                            <option value="student">{t.auth_page.student}</option>
-                            <option value="admin">{t.auth_page.admin_teacher}</option>
-                        </select>
-                    </div>
+                            <span>{t.auth_page.login_button}</span>
+                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.auth_page.email_user}</label>
-                        <input
-                            type="text"
-                            value={identifier}
-                            onChange={(e) => setIdentifier(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
-                            placeholder={t.auth_page.email_user}
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.auth_page.password}</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
-                            placeholder="••••••••"
-                        />
-                    </div>
-
-                    <div className="flex justify-center pt-2">
-                        <ReCAPTCHA
-                            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
-                            onChange={(value) => setRecaptchaValue(value)}
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-200 transform hover:scale-[1.02]"
-                    >
-                        {t.auth_page.login_button}
-                    </button>
-
-                    <div className="text-center text-sm text-gray-600 dark:text-gray-400">
-                        {t.auth_page.no_account}{" "}
-                        <Link href="/register" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium hover:underline">
-                            {t.auth_page.register_now}
-                        </Link>
-                    </div>
-                </form>
+                        <div className="text-center text-sm">
+                            <span className="text-gray-500 dark:text-gray-400 font-medium">{t.auth_page.no_account}</span>{" "}
+                            <Link href="/register" className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-black hover:underline ml-1">
+                                {t.auth_page.register_now}
+                            </Link>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    )
+    );
 }

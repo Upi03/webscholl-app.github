@@ -10,7 +10,9 @@ import Sidebar from "./components/Sidebar"
 import Toast from "./components/Toast";
 
 import StudentDashboard from "./components/StudentDashboard";
+import ParentDashboard from "./components/ParentDashboard";
 import DashboardCharts from "./components/DashboardCharts";
+import { useNotificationStore } from "./store/useNotificationStore";
 
 export default function HomePage() {
   const router = useRouter();
@@ -56,6 +58,8 @@ export default function HomePage() {
         <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900 transition-colors duration-300">
           {userData?.role === "student" ? (
             <StudentDashboard key={language} userData={userData} />
+          ) : userData?.role === "parent" ? (
+            <ParentDashboard key={language} userData={userData} />
           ) : (
             <div className="max-w-6xl mx-auto space-y-8">
 
@@ -131,47 +135,65 @@ export default function HomePage() {
               {/* Analytics Charts */}
               <DashboardCharts />
 
-              {/* Admin Broadcast Section */}
-              {userData?.role === 'admin' && (
-                <div className="bg-gradient-to-br from-indigo-600 to-purple-700 p-8 rounded-2xl shadow-xl text-white mb-8 border border-white/10 relative overflow-hidden group">
+              {/* Teacher/Admin Notification Section */}
+              {(userData?.role === 'admin' || userData?.role === 'teacher') && (
+                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-2xl shadow-xl text-white mb-8 border border-white/10 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
                     <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22a2 2 0 002-2H10a2 2 0 002 2zm6-6V10a6 6 0 00-9-5.16V4a3 3 0 00-6 0v.84A6 6 0 003 10v6l-2 2v1h18v-1l-2-2z" /></svg>
                   </div>
                   <div className="relative z-10">
                     <h3 className="text-2xl font-black mb-2 flex items-center gap-2">
                       <span className="p-2 bg-white/20 rounded-xl backdrop-blur-md">📢</span>
-                      Kirim Pengumuman Global
+                      {t.notifications.create_title}
                     </h3>
-                    <p className="text-indigo-100 text-sm mb-6 max-w-lg">Pesan ini akan dikirimkan ke seluruh siswa, guru, dan staff sekolah secara real-time melalui notifikasi sistem.</p>
+                    <p className="text-blue-100 text-sm mb-6 max-w-lg">{t.notifications.create_desc}</p>
 
-                    <div className="flex flex-col md:flex-row gap-4 items-end">
-                      <div className="flex-1 space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-widest text-indigo-200">Isi Pengumuman</label>
-                        <input
-                          type="text"
-                          id="broadcast-msg"
-                          placeholder="Ketik pengumuman penting di sini..."
-                          className="w-full px-6 py-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 outline-none transition-all"
-                        />
+                    <div className="flex flex-col gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase tracking-widest text-blue-200">{t.notifications.form_title}</label>
+                          <input
+                            type="text"
+                            id="notif-title"
+                            placeholder={t.notifications.form_placeholder_title}
+                            className="w-full px-6 py-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 outline-none transition-all"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase tracking-widest text-blue-200">{t.notifications.form_message}</label>
+                          <input
+                            type="text"
+                            id="notif-msg"
+                            placeholder={t.notifications.form_placeholder_message}
+                            className="w-full px-6 py-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 outline-none transition-all"
+                          />
+                        </div>
                       </div>
                       <button
                         onClick={() => {
-                          const msg = (document.getElementById('broadcast-msg') as HTMLInputElement).value;
-                          if (msg) {
-                            if ("Notification" in window) {
-                              Notification.requestPermission().then(permission => {
-                                if (permission === "granted") {
-                                  new Notification("WebScholl Broadcast", { body: msg });
-                                  setToast({ message: "Pengumuman berhasil disebarkan!", type: "success" });
-                                  (document.getElementById('broadcast-msg') as HTMLInputElement).value = "";
-                                }
-                              });
+                          const title = (document.getElementById('notif-title') as HTMLInputElement).value;
+                          const msg = (document.getElementById('notif-msg') as HTMLInputElement).value;
+                          if (title && msg) {
+                            // Add to Store
+                            useNotificationStore.getState().addNotification({
+                              title: title,
+                              message: msg,
+                              type: "info"
+                            });
+
+                            setToast({ message: t.notifications.success_msg, type: "success" });
+                            (document.getElementById('notif-title') as HTMLInputElement).value = "";
+                            (document.getElementById('notif-msg') as HTMLInputElement).value = "";
+
+                            // Logic for browser push notification
+                            if ("Notification" in window && Notification.permission === "granted") {
+                              new Notification(title, { body: msg });
                             }
                           }
                         }}
-                        className="px-8 py-4 bg-white text-indigo-600 rounded-2xl font-black hover:bg-gray-100 transition-all active:scale-95 shadow-xl"
+                        className="w-full md:w-auto self-end px-10 py-4 bg-white text-blue-600 rounded-2xl font-black hover:bg-gray-100 transition-all active:scale-95 shadow-xl"
                       >
-                        Kirim Sekarang
+                        {t.notifications.send_btn}
                       </button>
                     </div>
                   </div>

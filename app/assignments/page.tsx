@@ -45,11 +45,13 @@ export default function AssignmentsPage() {
         const userData = localStorage.getItem("currentUser")
         if (userData) {
             const parsedUser = JSON.parse(userData)
-            const userRole = parsedUser.role || "student" // Fallback to student if role is missing
+            const userRole = (parsedUser.role || "student").toLowerCase().trim()
             setRole(userRole)
 
             if (userRole === "student") {
                 setAssignments(STUDENT_ASSIGNMENTS)
+            } else if (userRole === "parent") {
+                setAssignments(STUDENT_ASSIGNMENTS) // View child's assignments
             } else {
                 setAssignments(TEACHER_SUBMISSIONS)
             }
@@ -122,13 +124,25 @@ export default function AssignmentsPage() {
                 <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 dark:bg-gray-900 transition-colors duration-300">
                     <div className="max-w-6xl mx-auto">
                         <div className="flex justify-between items-center mb-8">
-                            <h1 className="text-3xl font-bold text-gray-800 dark:text-white tracking-tight">
-                                {role === "student" ? t.assignments.student_title : t.assignments.teacher_title}
-                            </h1>
-                            {role !== "student" && (
+                            <div>
+                                <h1 className={`text-3xl font-black ${role === 'parent' ? 'text-red-600' : 'text-gray-800'} dark:text-white tracking-tight`}>
+                                    {role === "parent" ? "Pantauan Tugas Anak" : role === "student" ? t.assignments.student_title : t.assignments.teacher_title}
+                                </h1>
+                                {role === 'parent' && <p className="text-sm text-gray-500 font-medium">Monitoring penyelesaian tugas dan nilai anak secara real-time.</p>}
+                            </div>
+                            {(role !== "student" && role !== "parent" && role !== "admin") && (
                                 <button
                                     onClick={() => setIsCreateModalOpen(true)}
                                     className="bg-blue-600 text-white px-6 py-2.5 rounded-xl shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5 font-medium"
+                                >
+                                    {t.assignments.create_button}
+                                </button>
+                            )}
+                            {/* Force hide for parents/students, show ONLY for teacher/admin */}
+                            {(role === "teacher" || role === "admin") && (
+                                <button
+                                    onClick={() => setIsCreateModalOpen(true)}
+                                    className="bg-red-600 text-white px-6 py-2.5 rounded-xl shadow-lg hover:bg-red-700 hover:shadow-xl transition-all transform hover:-translate-y-0.5 font-medium"
                                 >
                                     {t.assignments.create_button}
                                 </button>
@@ -146,7 +160,7 @@ export default function AssignmentsPage() {
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                                 {t.assignments.title}
                                             </th>
-                                            {role !== "student" && (
+                                            {role !== "student" && role !== "parent" && (
                                                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                                     {t.assignments.student_name}
                                                 </th>
@@ -158,9 +172,9 @@ export default function AssignmentsPage() {
                                                 {t.assignments.status}
                                             </th>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                                {role === "student" ? t.assignments.score : t.assignments.input_score}
+                                                {(role === "student" || role === "parent") ? t.assignments.score : t.assignments.input_score}
                                             </th>
-                                            {role === "student" && (
+                                            {(role === "student" || role === "parent") && (
                                                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                                     {t.assignments.action}
                                                 </th>
@@ -172,7 +186,7 @@ export default function AssignmentsPage() {
                                             <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{item.subject}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">{item.title}</td>
-                                                {role !== "student" && (
+                                                {role !== "student" && role !== "parent" && (
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">{item.studentName}</td>
                                                 )}
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 font-mono">{item.deadline}</td>
@@ -193,14 +207,14 @@ export default function AssignmentsPage() {
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                                    {role === "student" ? (
+                                                    {(role === "student" || role === "parent") ? (
                                                         item.score ? <span className="font-bold text-lg text-green-600 dark:text-green-400">{item.score}</span> : <span className="text-gray-400">-</span>
                                                     ) : (
                                                         <input
                                                             type="number"
                                                             min="0"
                                                             max="100"
-                                                            className="w-20 px-3 py-1.5 border rounded-lg text-black dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none transition"
+                                                            className="w-20 px-3 py-1.5 border rounded-lg text-black dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-red-500 outline-none transition"
                                                             value={(item.score === 0 && item.status !== "Dinilai") ? "" : (item.score ?? "")}
                                                             placeholder={t.assignments.placeholder}
                                                             onChange={(e) => handleGradingChange(item.id, e.target.value)}
@@ -212,10 +226,15 @@ export default function AssignmentsPage() {
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                         <button
                                                             onClick={() => handleUploadClick(item)}
-                                                            className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 text-xs uppercase tracking-wider font-bold"
+                                                            className="text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 text-xs uppercase tracking-wider font-bold"
                                                         >
                                                             Upload
                                                         </button>
+                                                    </td>
+                                                )}
+                                                {role === "parent" && (
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                        <span className="text-red-500 font-bold text-[10px] uppercase tracking-widest bg-red-50 dark:bg-red-900/20 px-3 py-1 rounded-full border border-red-100 dark:border-red-900/50">Checked</span>
                                                     </td>
                                                 )}
                                             </tr>
@@ -280,7 +299,7 @@ export default function AssignmentsPage() {
                                         </button>
                                         <button
                                             onClick={handleCreateAssignment}
-                                            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5"
+                                            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5"
                                         >
                                             {t.assignments.save_button}
                                         </button>

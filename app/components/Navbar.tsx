@@ -11,13 +11,44 @@ import Toast from "./Toast";
 import { STUDENTS_DATA, APP_PAGES } from "../../lib/dummyData";
 import { useLanguage } from "@/app/contexts/LanguageContext";
 
+import { useNotificationStore } from "../store/useNotificationStore";
+
 export default function Navbar() {
     const { isNavbarOpen, toggleNavbar, openSidebar } = useNavStore();
     const { t, language } = useLanguage();
     const pathname = usePathname();
     const router = useRouter();
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+    const [userData, setUserData] = useState<{ username?: string; role?: string } | null>(null);
     const [toast, setToast] = useState<{ message: string; type: "success" | "error" | "info" } | null>(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("currentUser");
+        if (storedUser) {
+            setUserData(JSON.parse(storedUser));
+        }
+    }, []);
+
+    const isParent = userData?.role === "parent";
+
+    // Notification Store
+    const { notifications, markAllAsRead, unreadCount } = useNotificationStore();
+    const currentUnreadCount = unreadCount();
+
+    // Effect for showing toast on NEW notifications (only if dropdown is NOT open)
+    useEffect(() => {
+        if (notifications.length > 0) {
+            const latest = notifications[0];
+            // If it was created less than 2 seconds ago, show toast
+            const isVeryRecent = Date.now() - new Date(latest.time).getTime() < 2000;
+            if (isVeryRecent && !latest.isRead) {
+                setToast({
+                    message: `${t.navbar.notifications}: ${latest.title}`,
+                    type: "info"
+                });
+            }
+        }
+    }, [notifications.length, t.navbar.notifications]);
 
     // Search States
     const [searchQuery, setSearchQuery] = useState("");
@@ -69,19 +100,17 @@ export default function Navbar() {
         setIsSearchOpen(false);
     };
 
-    const [notifications] = useState([
-        { id: 1, title: language === 'id' ? "Rapat Guru" : "Teacher Meeting", message: language === 'id' ? "Rapat bulanan besok jam 09:00" : "Monthly meeting tomorrow at 09:00", time: language === 'id' ? "1 jam yang lalu" : "1 hour ago" },
-        { id: 2, title: language === 'id' ? "Jadwal Ujian" : "Exam Schedule", message: language === 'id' ? "Jadwal UAS telah dirilis" : "Final exam schedule released", time: language === 'id' ? "2 jam yang lalu" : "2 hours ago" },
-        { id: 3, title: language === 'id' ? "Absensi" : "Attendance", message: language === 'id' ? "Rekap absensi bulan ini siap" : "Monthly attendance recap ready", time: language === 'id' ? "5 jam yang lalu" : "5 hours ago" },
-    ]);
-
     const handleNotificationClick = () => {
         setIsNotificationOpen(!isNotificationOpen);
+        if (!isNotificationOpen) {
+            // Optional: Mark all as read when opening
+            // markAllAsRead();
+        }
     };
 
-    const handleNewNotification = () => {
-        setToast({ message: t.navbar.notification_simulation_toast, type: "info" });
-        setIsNotificationOpen(false);
+    const handleMarkAllRead = () => {
+        markAllAsRead();
+        setToast({ message: t.navbar.notification_simulation_toast, type: "success" });
     };
 
     return (
@@ -96,11 +125,13 @@ export default function Navbar() {
                         }
                     }}
                 >
-                    <svg className="w-8 h-8 text-blue-600 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-8 h-8 text-red-600 group-hover:text-red-500 transition-colors`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                     </svg>
-                    <h1 className="text-xl font-bold tracking-wide text-gray-900 dark:text-white" suppressHydrationWarning>WebSchooll App</h1>
+                    <h1 className="text-xl font-bold tracking-wide text-gray-900 dark:text-white" suppressHydrationWarning>
+                        {isParent ? "Wali Murid Portal" : "WebSchooll App"}
+                    </h1>
                 </div>
 
                 {/* Global Search Bar - Desktop */}
@@ -114,7 +145,7 @@ export default function Navbar() {
                         <input
                             id="global-search"
                             type="text"
-                            className="block w-full pl-10 pr-12 py-2 border-2 border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 rounded-2xl text-sm outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all dark:text-white font-medium shadow-sm"
+                            className={`block w-full pl-10 pr-12 py-2 border-2 border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 rounded-2xl text-sm outline-none focus:border-red-500/50 focus:ring-4 focus:ring-red-500/5 transition-all dark:text-white font-medium shadow-sm`}
                             placeholder={t.navbar.search_placeholder}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -185,7 +216,9 @@ export default function Navbar() {
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                         </svg>
-                        <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white dark:ring-gray-900 animate-pulse"></span>
+                        {currentUnreadCount > 0 && (
+                            <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white dark:ring-gray-900 animate-pulse"></span>
+                        )}
                     </button>
                 </nav>
 
@@ -229,27 +262,46 @@ export default function Navbar() {
                 <div className="absolute top-16 right-4 sm:right-20 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden z-[100] animate-fade-in-up origin-top-right">
                     <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
                         <h3 className="font-bold text-gray-900 dark:text-white">{t.navbar.notifications}</h3>
-                        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">3 {t.navbar.new_notifications}</span>
+                        {currentUnreadCount > 0 && (
+                            <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">{currentUnreadCount} {t.navbar.new_notifications}</span>
+                        )}
                     </div>
                     <div className="max-h-80 overflow-y-auto">
-                        {notifications.map((notif) => (
-                            <div key={notif.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700/50 transition-colors cursor-pointer group">
-                                <div className="flex justify-between items-start mb-1">
-                                    <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{notif.title}</h4>
-                                    <span className="text-[10px] text-gray-400">{notif.time}</span>
+                        {notifications.length > 0 ? (
+                            notifications.map((notif) => (
+                                <div
+                                    key={notif.id}
+                                    className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700/50 transition-colors cursor-pointer group relative ${!notif.isRead ? 'bg-blue-50/30 dark:bg-blue-900/10' : ''}`}
+                                    onClick={() => useNotificationStore.getState().markAsRead(notif.id)}
+                                >
+                                    {!notif.isRead && (
+                                        <div className="absolute top-4 right-4 w-2 h-2 bg-blue-500 rounded-full"></div>
+                                    )}
+                                    <div className="flex justify-between items-start mb-1 pr-6">
+                                        <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{notif.title}</h4>
+                                        <span className="text-[10px] text-gray-400 whitespace-nowrap ml-2">
+                                            {new Date(notif.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{notif.message}</p>
                                 </div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{notif.message}</p>
+                            ))
+                        ) : (
+                            <div className="p-8 text-center text-gray-400 text-sm italic">
+                                {t.navbar.no_notifications || "Tidak ada notifikasi"}
                             </div>
-                        ))}
+                        )}
                     </div>
-                    <div className="p-3 bg-gray-50 dark:bg-gray-900/50 text-center border-t border-gray-100 dark:border-gray-700">
-                        <button
-                            onClick={handleNewNotification}
-                            className="text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 uppercase tracking-wider"
-                        >
-                            {t.navbar.simulation}
-                        </button>
-                    </div>
+                    {currentUnreadCount > 0 && (
+                        <div className="p-3 bg-gray-50 dark:bg-gray-900/50 text-center border-t border-gray-100 dark:border-gray-700">
+                            <button
+                                onClick={handleMarkAllRead}
+                                className="text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 uppercase tracking-wider"
+                            >
+                                {t.navbar.simulation || "Tandai Semua Dibaca"}
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
 

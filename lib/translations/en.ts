@@ -22,7 +22,8 @@ export const en = {
         search_placeholder: "Search features or students... (K)",
         notifications: "Notifications",
         new_notifications: "New",
-        simulation: "Simulate New Notification",
+        no_notifications: "No new notifications",
+        simulation: "Mark All As Read",
         navigation: "Navigation",
         student_label: "Student",
         notification_simulation_toast: "New Notification: School Holiday Announcement!"
@@ -53,6 +54,17 @@ export const en = {
         school_info: "School Info",
         user_account: "User Account",
         user_email: "user@school.com"
+    },
+    sidebar_parent: {
+        dashboard: "Monitoring Hub",
+        news: "Announcements",
+        map: "School Location",
+        attendance: "Child Attendance",
+        assignments: "Tasks & Homework",
+        schedule: "Study Schedule",
+        reports: "Digital Report Card",
+        billing: "SPP & Payments",
+        profile: "Parent Profile"
     },
     dashboard: {
         welcome: "Welcome back,",
@@ -128,6 +140,30 @@ export const en = {
             { id: 2, time: "09:30", subject: "English", teacher: "Ms. Sarah", room: "Language Lab", color: "green" },
             { id: 3, time: "11:00", subject: "Physics", teacher: "Ms. Rina", room: "Science Lab", color: "purple" }
         ]
+    },
+    parent_dashboard: {
+        greeting: "Hello, Parent/Guardian",
+        welcome_desc: "Monitor your child's academic and administrative progress easily.",
+        child_profile: "Child Profile",
+        child_name: "Student Name",
+        child_class: "Class",
+        billing_status: "SPP Status",
+        late_assignments: "Late Assignments",
+        attendance_summary: "Attendance Recap",
+        attendance_target: "Minimum 90% Attendance",
+        monitoring_hub: "Child Monitoring Hub",
+        today_presence: "Today's Attendance Status",
+        present_at: "Present at",
+        not_present_yet: "Not scanned in yet",
+        assignment_status: "Assignments & Homework Status",
+        urgent_assignments: "Late Assignments",
+        pending_assignments: "Pending Tasks",
+        all_clear: "Great! All clear for today.",
+        total_billing: "Total Billing",
+        due_date: "Due Date",
+        paid: "Paid",
+        unpaid: "Unpaid",
+        view_billing: "View Billing Details"
     },
     contact: {
         title: "Contact Us",
@@ -266,6 +302,7 @@ export const en = {
         login_subtitle: "Please login to access the Dashboard",
         login_as: "Login As",
         student: "Student",
+        parent: "Parent",
         admin_teacher: "Teacher / Admin",
         email_user: "Email or Username",
         password: "Password",
@@ -275,6 +312,7 @@ export const en = {
         register_title: "Create New Account",
         register_subtitle: "Please register to start using the Dashboard",
         username: "Username",
+        fullname: "Full Name",
         confirm_password: "Confirm Password",
         register_button: "Register",
         have_account: "Already have an account?",
@@ -481,6 +519,17 @@ export const en = {
         all: "All",
         admin: "Admin",
         teacher: "Teacher",
-        student: "Student"
-    }
+        student: "Student",
+        parent: "Parent"
+    },
+    notifications: {
+        create_title: "Create School Announcement",
+        create_desc: "Send real-time notifications to all students and staff.",
+        form_title: "Announcement Title",
+        form_message: "Message Body",
+        form_placeholder_title: "e.g., School Holiday Info",
+        form_placeholder_message: "Type announcement here...",
+        send_btn: "Send Announcement",
+        success_msg: "Announcement broadcasted successfully!",
+    },
 };

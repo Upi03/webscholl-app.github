@@ -29,8 +29,14 @@ export default function ProfilePage() {
     }, []);
 
     const isStudent = userData?.role === "student";
+    const isParent = userData?.role === "parent";
 
-    const stats = isStudent ? [
+    const stats = isParent ? [
+        { label: "Anak Terpantau", value: "1", icon: "🧒", color: "bg-red-500" },
+        { label: "Kehadiran Anak", value: "98%", icon: "📅", color: "bg-emerald-500" },
+        { label: "Tugas Selesai", value: "24", icon: "✅", color: "bg-blue-500" },
+        { label: "Tagihan Lunas", value: "Jan-Feb", icon: "💰", color: "bg-amber-500" },
+    ] : isStudent ? [
         { label: t.profile_page.stats.attendance, value: "95%", icon: "📅", color: "bg-blue-500" },
         { label: t.profile_page.stats.assignments, value: "12", icon: "📚", color: "bg-green-500" },
         { label: t.profile_page.stats.average_grade, value: "88.5", icon: "⭐", color: "bg-yellow-500" },
@@ -54,7 +60,7 @@ export default function ProfilePage() {
                             <div className="absolute top-0 right-0 p-4">
                                 <Link
                                     href="/settings"
-                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-200 dark:shadow-none transition-all active:scale-95 flex items-center gap-2"
+                                    className={`px-4 py-2 bg-red-600 hover:bg-red-700 shadow-red-200 text-white rounded-xl text-sm font-bold shadow-lg dark:shadow-none transition-all active:scale-95 flex items-center gap-2`}
                                 >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -65,12 +71,12 @@ export default function ProfilePage() {
 
                             <div className="flex flex-col md:flex-row gap-4 items-center md:items-end">
                                 <div className="relative">
-                                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 p-1 shadow-xl overflow-hidden">
+                                    <div className={`w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-tr from-red-600 to-blue-700 p-1 shadow-xl overflow-hidden`}>
                                         {userData?.photo ? (
                                             // eslint-disable-next-line @next/next/no-img-element
                                             <img src={userData.photo} alt="Profile" className="w-full h-full object-cover rounded-xl" />
                                         ) : (
-                                            <div className="w-full h-full rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-blue-600 to-indigo-600">
+                                            <div className={`w-full h-full rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-red-600 to-blue-700`}>
                                                 {userData?.username?.substring(0, 2).toUpperCase() || "US"}
                                             </div>
                                         )}
@@ -79,8 +85,8 @@ export default function ProfilePage() {
                                 </div>
                                 <div className="text-center md:text-left flex-1">
                                     <h2 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-1 tracking-tight">{userData?.username || t.profile_page.default_username}</h2>
-                                    <p className="text-blue-600 dark:text-blue-400 font-bold mb-2 uppercase tracking-wide">
-                                        {isStudent ? t.profile_page.role_student : t.profile_page.role_teacher}
+                                    <p className={`font-bold mb-2 uppercase tracking-wide text-red-600`}>
+                                        {isParent ? "Wali Murid" : isStudent ? t.profile_page.role_student : t.profile_page.role_teacher}
                                     </p>
                                     <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-gray-500 dark:text-gray-400">
                                         <span className="flex items-center gap-1">
@@ -113,7 +119,7 @@ export default function ProfilePage() {
                         <div className="flex justify-center">
                             <Link
                                 href="/profile-details"
-                                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-black shadow-xl shadow-blue-200 dark:shadow-none transition-all active:scale-95 flex items-center gap-3 tracking-wide"
+                                className={`px-8 py-4 bg-gradient-to-r from-red-600 to-blue-700 shadow-red-200 hover:opacity-90 text-white rounded-2xl font-black shadow-xl dark:shadow-none transition-all active:scale-95 flex items-center gap-3 tracking-wide`}
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
