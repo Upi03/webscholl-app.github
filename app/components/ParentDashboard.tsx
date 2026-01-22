@@ -204,7 +204,7 @@ export default function ParentDashboard({ userData }: { userData: any }) {
                                         <div className={`absolute -left-[35px] w-4 h-4 rounded-full ${dotColorClass} border-4 border-white dark:border-gray-800 shadow-lg z-10 group-hover/time:scale-150 transition-transform`}></div>
                                         <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
                                             <span className="text-xs font-black text-rose-500 whitespace-nowrap uppercase tracking-[0.2em]">{activity.date}</span>
-                                            <div className="flex-1 p-5 bg-white/60 dark:bg-gray-800/60 rounded-[2rem] border border-white dark:border-gray-700 group-hover/time:bg-white transition-all shadow-sm group-hover/time:shadow-xl group-hover/time:shadow-rose-100/30">
+                                            <div className="flex-1 p-5 bg-white/60 dark:bg-gray-800/60 rounded-[2rem] border border-white dark:border-gray-700 group-hover/time:bg-white dark:group-hover/time:bg-gray-800 transition-all shadow-sm group-hover/time:shadow-xl group-hover/time:shadow-rose-100/30">
                                                 <div className="flex gap-4">
                                                     <div className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-xl shadow-inner">{activity.icon}</div>
                                                     <div>

@@ -174,11 +174,25 @@ export default function HomePage() {
                           const title = (document.getElementById('notif-title') as HTMLInputElement).value;
                           const msg = (document.getElementById('notif-msg') as HTMLInputElement).value;
                           if (title && msg) {
-                            // Add to Store
+                            // Add to Store (Local immediate feedback)
                             useNotificationStore.getState().addNotification({
                               title: title,
                               message: msg,
                               type: "info"
+                            });
+
+                            // Insert into Supabase for Global Broadcast
+                            import("@/lib/supabase").then(({ supabase }) => {
+                              if (supabase) {
+                                supabase.from('broadcasts').insert({
+                                  title: title,
+                                  message: msg,
+                                  type: 'info', // Default type
+                                  created_at: new Date().toISOString()
+                                }).then(({ error }: { error: any }) => {
+                                  if (error) console.error("Broadcast error:", error);
+                                });
+                              }
                             });
 
                             setToast({ message: t.notifications.success_msg, type: "success" });

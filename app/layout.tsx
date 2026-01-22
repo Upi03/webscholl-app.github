@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayoutWrapper from "./components/ClientLayoutWrapper";
-
+import BroadcastListener from "./components/BroadcastListener";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +43,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 dark:bg-gray-950 transition-colors duration-300`}
       >
         <ClientLayoutWrapper>
+          <BroadcastListener />
           {children}
         </ClientLayoutWrapper>
       </body>

@@ -6,7 +6,12 @@ import Sidebar from "../components/Sidebar";
 import QrScanner from "../components/QrScanner";
 import Toast from "../components/Toast";
 import { useLanguage } from "@/app/contexts/LanguageContext";
-import { QRCodeCanvas } from "qrcode.react";
+import dynamic from "next/dynamic";
+
+const QRCodeCanvas = dynamic(
+    () => import("qrcode.react").then((mod) => mod.QRCodeCanvas),
+    { ssr: false }
+);
 
 export default function AttendancePage() {
     const { t } = useLanguage();
@@ -20,8 +25,9 @@ export default function AttendancePage() {
 
     const [attendanceHistory, setAttendanceHistory] = useState([
         { id: 1, date: "Senin, 19 Januari 2026", status: "Hadir Tepat Waktu", time: "07:00" },
-        { id: 2, date: "Senin, 18 Januari 2026", status: "Hadir Tepat Waktu", time: "07:00" },
-        { id: 3, date: "Senin, 17 Januari 2026", status: "Hadir Tepat Waktu", time: "07:00" }
+        { id: 2, date: "Senin, 26 Januari 2026", status: "Hadir Tepat Waktu", time: "07:00" },
+        { id: 3, date: "Senin, 04 Februari 2026", status: "Hadir Tepat Waktu", time: "07:00" },
+        { id: 4, date: "Senin, 12 Februari 2026", status: "Hadir Tepat Waktu", time: "07:00" }
     ]);
 
     React.useEffect(() => {
