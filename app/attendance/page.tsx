@@ -13,6 +13,8 @@ const QRCodeCanvas = dynamic(
     { ssr: false }
 );
 
+// Force HMR Re-compile
+
 export default function AttendancePage() {
     const { t } = useLanguage();
     const [userData, setUserData] = useState<{ username?: string; email?: string; role?: string } | null>(null);

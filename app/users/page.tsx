@@ -40,6 +40,13 @@ function UsersContent() {
     const handleDownloadID = async () => {
         if (!idCardRef.current) return;
         setIsDownloading(true);
+
+        const originalError = console.error;
+        console.error = (...args: any[]) => {
+            if (typeof args[0] === 'string' && args[0].includes('unsupported color function "lab"')) return;
+            originalError.apply(console, args);
+        };
+
         try {
             const canvas = await html2canvas(idCardRef.current, {
                 backgroundColor: null,
@@ -47,12 +54,15 @@ function UsersContent() {
                 useCORS: true, // For external images (like QR)
                 logging: false,
             });
+            console.error = originalError;
+
             const image = canvas.toDataURL("image/png");
             const link = document.createElement("a");
             link.href = image;
             link.download = `digital-id-${selectedUser.name.replace(/\s+/g, '-').toLowerCase()}.png`;
             link.click();
         } catch (error) {
+            console.error = originalError;
             console.error("Failed to download ID:", error);
             alert("Gagal mengunduh ID Card.");
         } finally {

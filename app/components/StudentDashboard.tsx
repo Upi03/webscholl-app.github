@@ -23,7 +23,7 @@ export default function StudentDashboard({ userData }: { userData: any }) {
             </div>
 
             {/* Student Specific Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                     <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.student_dashboard.attendance}</h3>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">95%</p>
@@ -38,6 +38,29 @@ export default function StudentDashboard({ userData }: { userData: any }) {
                     <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t.student_dashboard.average_score}</h3>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">88.5</p>
                     <span className="text-xs text-red-500">{t.student_dashboard.keep_it_up}</span>
+                </div>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group hover:scale-[1.02] transition-transform cursor-pointer" onClick={() => router.push('/leaderboard')}>
+                    <div className="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-yellow-400/20 rounded-full blur-xl"></div>
+                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Gamification</h3>
+                    <div className="flex items-end gap-2 mt-1">
+                        <p className="text-2xl font-black text-yellow-500">2500</p>
+                        <p className="text-xs font-bold text-gray-400 mb-1">Pts</p>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs text-yellow-600 dark:text-yellow-400 font-bold mt-1">
+                        <span>🏆 Siswa Teladan</span>
+                    </div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group hover:scale-[1.02] transition-transform cursor-pointer" onClick={() => router.push('/student-card')}>
+                    <div className="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-indigo-400/20 rounded-full blur-xl"></div>
+                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Digital ID</h3>
+                    <div className="flex items-center gap-2 mt-2">
+                        <div className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs font-black uppercase tracking-widest">
+                            Active
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs text-indigo-600 dark:text-indigo-400 font-bold mt-2">
+                        <span>🆔 Lihat Kartu</span>
+                    </div>
                 </div>
             </div>
 

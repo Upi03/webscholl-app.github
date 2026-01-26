@@ -163,9 +163,14 @@ export default function Navbar() {
                         <div className="absolute top-full left-0 w-full mt-2 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden z-[100] animate-fade-in-up">
                             <div className="max-h-80 overflow-y-auto py-2">
                                 {searchResults.map((result, idx) => (
-                                    <button
+                                    <Link
                                         key={idx}
-                                        onClick={() => handleResultClick(result.path)}
+                                        href={result.path}
+                                        onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                                        onClick={() => {
+                                            setSearchQuery("");
+                                            setIsSearchOpen(false);
+                                        }}
                                         className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors text-left group"
                                     >
                                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs shadow-sm shadow-blue-100 dark:shadow-none
@@ -180,7 +185,7 @@ export default function Navbar() {
                                             <p className="text-sm font-bold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{result.name}</p>
                                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{result.type === 'page' ? t.navbar.navigation : t.navbar.student_label}</p>
                                         </div>
-                                    </button>
+                                    </Link>
                                 ))}
                             </div>
                         </div>

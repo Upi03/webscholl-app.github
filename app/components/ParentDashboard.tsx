@@ -249,16 +249,24 @@ export default function ParentDashboard({ userData }: { userData: any }) {
                         </button>
                     </div>
 
-                    {/* Quick Access Grid: Unique Buttons */}
+                    {/* Quick Access Grid: Modern 2x2 Layout */}
                     <div className="grid grid-cols-2 gap-4">
-                        <button className="p-6 bg-white dark:bg-gray-800 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all flex flex-col items-center gap-3">
-                            <span className="text-3xl">📊</span>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">E-Raport</span>
-                        </button>
-                        <button className="p-6 bg-white dark:bg-gray-800 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all flex flex-col items-center gap-3">
-                            <span className="text-3xl">📝</span>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Absensi</span>
-                        </button>
+                        <a href="/payments" className="p-5 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group">
+                            <span className="text-3xl grayscale group-hover:grayscale-0 transition-all duration-500">�</span>
+                            <span className="text-[10px] font-black text-gray-500 group-hover:text-emerald-500 uppercase tracking-widest text-center mt-1">Bayar SPP</span>
+                        </a>
+                        <a href="/suggestions" className="p-5 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group">
+                            <span className="text-3xl grayscale group-hover:grayscale-0 transition-all duration-500">📩</span>
+                            <span className="text-[10px] font-black text-gray-500 group-hover:text-blue-500 uppercase tracking-widest text-center mt-1">Saran</span>
+                        </a>
+                        <a href="/library" className="p-5 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group">
+                            <span className="text-3xl grayscale group-hover:grayscale-0 transition-all duration-500">�</span>
+                            <span className="text-[10px] font-black text-gray-500 group-hover:text-orange-500 uppercase tracking-widest text-center mt-1">E-Lib</span>
+                        </a>
+                        <a href="/ai-assistant" className="p-5 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group">
+                            <span className="text-3xl grayscale group-hover:grayscale-0 transition-all duration-500">🤖</span>
+                            <span className="text-[10px] font-black text-gray-500 group-hover:text-violet-500 uppercase tracking-widest text-center mt-1">AI Help</span>
+                        </a>
                     </div>
 
                     {/* Teacher Contact: Card Style */}

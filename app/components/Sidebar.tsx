@@ -54,7 +54,7 @@ export default function Sidebar() {
         const activeBase = "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 shadow-sm";
         const inactiveBase = "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white";
 
-        return `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive(path) ? activeBase : inactiveBase}`;
+        return `flex items-center space-x-3 px-4 py-3.5 rounded-xl text-sm font-black transition-all ${isActive(path) ? activeBase : inactiveBase}`;
     }
 
     return (
@@ -78,10 +78,10 @@ export default function Sidebar() {
                                 </svg>
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-gray-900 dark:text-white tracking-tight leading-none">
+                                <span className="text-xl font-black text-gray-900 dark:text-white tracking-tighter leading-none">
                                     Web<span className="text-red-600 dark:text-red-400">Schooll</span>
                                 </span>
-                                <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <span className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-1">
                                     {isParent ? "Parent Portal" : "Management"}
                                 </span>
                             </div>
@@ -147,29 +147,40 @@ export default function Sidebar() {
                                 <span>{isParent ? (t as any).sidebar_parent.schedule : t.sidebar.schedule}</span>
                             </Link>
                         </li>
-                        <li>
-                            <Link href="/reports" className={linkClass("/reports")}>
-                                <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 2v-6m-8-4h5l5 5v11a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2h2z" />
-                                </svg>
-                                <span>{isParent ? (t as any).sidebar_parent.reports : t.sidebar.reports}</span>
-                            </Link>
-                        </li>
+
                         <li>
                             <Link href="/billing" className={linkClass("/billing")}>
                                 <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span>{isParent ? (t as any).sidebar_parent.billing : t.sidebar.billing}</span>
+                                <span>{isParent ? "Riwayat Pembayaran SPP" : t.sidebar.billing || "Tagihan"}</span>
                             </Link>
                         </li>
+                        <li>
+                            <Link href="/payments" className={linkClass("/payments")}>
+                                <svg className="w-5 h-5 transition-transform group-hover:scale-110 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                <span>{isParent ? "Bayar SPP Anak" : "Bayar SPP"}</span>
+                            </Link>
+                        </li>
+                        {userData?.role === "student" && (
+                            <li>
+                                <Link href="/student-card" className={linkClass("/student-card")}>
+                                    <svg className="w-5 h-5 transition-transform group-hover:scale-110 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                                    </svg>
+                                    <span>Kartu Pelajar</span>
+                                </Link>
+                            </li>
+                        )}
 
                         {/* Restricted Management Links */}
                         {(userData?.role === "admin" || userData?.role === "teacher") && (
                             <>
-                                <div className="pt-4 pb-2">
+                                <li className="pt-4 pb-2">
                                     <p className="px-4 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Management</p>
-                                </div>
+                                </li>
                                 <li>
                                     <Link href="/teachers" className={linkClass("/teachers")}>
                                         <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,9 +272,9 @@ export default function Sidebar() {
                             </li>
                         )}
 
-                        <div className="pt-4 pb-2">
+                        <li className="pt-4 pb-2">
                             <p className="px-4 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Settings</p>
-                        </div>
+                        </li>
                         {(userData?.role === "admin" || userData?.role === "teacher") && (
                             <li>
                                 <Link href="/settings" className={linkClass("/settings")}>
