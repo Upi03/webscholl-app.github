@@ -148,22 +148,26 @@ export default function Sidebar() {
                             </Link>
                         </li>
 
-                        <li>
-                            <Link href="/billing" className={linkClass("/billing")}>
-                                <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                <span>{isParent ? "Riwayat Pembayaran SPP" : t.sidebar.billing || "Tagihan"}</span>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/payments" className={linkClass("/payments")}>
-                                <svg className="w-5 h-5 transition-transform group-hover:scale-110 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                <span>{isParent ? "Bayar SPP Anak" : "Bayar SPP"}</span>
-                            </Link>
-                        </li>
+                        {(userData?.role === "student" || userData?.role === "parent") && (
+                            <>
+                                <li>
+                                    <Link href="/billing" className={linkClass("/billing")}>
+                                        <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span>{isParent ? "Riwayat Pembayaran SPP" : t.sidebar.billing || "Tagihan"}</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/payments" className={linkClass("/payments")}>
+                                        <svg className="w-5 h-5 transition-transform group-hover:scale-110 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span>{isParent ? "Bayar SPP Anak" : "Bayar SPP"}</span>
+                                    </Link>
+                                </li>
+                            </>
+                        )}
                         {userData?.role === "student" && (
                             <li>
                                 <Link href="/student-card" className={linkClass("/student-card")}>
